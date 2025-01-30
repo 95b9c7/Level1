@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check In</title>
+    <link rel="stylesheet" href="{% static 'css/splash.css' %}">
+    
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.png' %}" alt="Company Logo" class="logo">
+        </div>
+        <div class="location">
+            <p>Laredo, Tx</p>
+        </div>
+    </div>
+    <div class="splash-screen">
+        <div class="splash-content">
+            <img src="{% static 'images/Level1DA.png' %}" alt="Company Logo" class="logo">
+            <h1>Welcome!</h1>
+        </div>
+    </div>
+    <div class="center-text">
+        <h2 class="form-title">Driver Check-In</h2>
+        <h3 class="form-subtitle">Please fill out the form below to check-in</h3>
+    </div>
+    
+    <div class="form-container">
+    
+        <form method="post" class="sleek-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}" class="form-label">Driver Name</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.dot_number.id_for_label }}" class="form-label">DOT Number</label>
+                {{ form.dot_number }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.company.id_for_label }}" class="form-label">Company</label>
+                {{ form.company }}
+            </div>
+
+            {{ form.errors }}
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

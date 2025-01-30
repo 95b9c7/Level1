@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .sign-out-button {
+            color: #fff; /* Text color for the button */
+            background-color: #f00; /* Background color for the button */
+            padding: 10px 20px; /* Adjust padding as needed */
+            border-radius: 5px; /* Add rounded corners */
+            text-decoration: none; /* Remove underline from the link */
+            margin-right: 20px; /* Add spacing between the button and text */
+            float: right; /* Float the button to the right */
+            font-weight: bold;
+        }
+        /* Define styles for the sign-out button on hover */
+        .sign-out-button:hover {
+            background-color: #ff0000; /* Change the background color on hover */
+            color: #fff; /* Change the text color on hover */
+            transform: scale(1.05); /* Add a scaling effect on hover (optional) */
+        }
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            /* You can specify multiple fonts in a fallback order, in case the first one isn't available */
+        }
+        .center-text {
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 20px; /* Adjust the size as needed */
+            margin-top: 10px; /* Add space between title and subtitle */
+            font-weight: bold;
+        }
+         /* Style for the text on the top left */
+         .top-right-text h1 {
+            margin: 0; /* Remove default margin to avoid extra spacing */
+            font-size: 24px; /* Adjust the font size as needed */
+            color: white; /* Text color */
+            font-weight: bold; /* Make it bold */
+        }
+
+        .logo {
+            width: 200px; /* Set the desired width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style for the top blue bar */
+        .top-bar {
+            background-color: #15408c; /* Blue color */
+            height: 100px; /* Adjust the height as needed */
+            text-align: center;
+            display: flex;
+            justify-content: space-between; /* Align items in a row with space between them */
+            align-items: center; /* Vertically center items */
+            padding: 0 20px; /* Add some left and right padding for spacing */
+        }
+
+        .select-option {
+            margin-bottom: 50px; /* Add spacing between "Select an option" and buttons */
+        }
+
+        .button-list {
+            list-style: none; /* Remove default list bullets */
+            padding: 0;
+            display: flex; /* Display list items in a row */
+            justify-content: center; /* Center the buttons horizontally */
+            align-items: center; /* Vertically center items */
+            margin-top: 20px; /* Add space between the heading and buttons */
+        }
+
+        .menu-button {
+            /* Apply the 'button-15' class styles to the menu buttons */
+            background-image: linear-gradient(#15408c, #849cc4);
+            border: 1px solid #0077CC;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 17px; /* Match the font size with your button styles */
+            font-weight: bold;
+            letter-spacing: -.022em;
+            line-height: 1.47059;
+            min-width: 150px; /* Set a minimum width for buttons */
+            padding: 10px 15px; /* Adjust padding as needed */
+            text-align: center;
+            text-decoration: none; /* Remove underlines from links */
+            white-space: nowrap;
+            transition: background-image 0.3s, border-color 0.3s; /* Add hover transition */
+            margin: 0 10px; /* Add space between buttons */
+        }
+        .menu-button:hover {
+            background-image: linear-gradient(#51A9EE, #147BCD);
+            border-color: #1482D0;
+            text-decoration: none;
+        }
+
+        .menu-button:active {
+            background-image: linear-gradient(#3D94D9, #0067B9);
+            border-color: #006DBC;
+            outline: none;
+        }
+
+        .menu-button:focus {
+            box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
+            outline: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #close-modal {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #0077CC;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .red-button {
+            background-image: linear-gradient(#FF0000, #CC0000); /* Red color gradient */
+            border: 1px solid #FF0000; /* Border color */
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: bold;
+            letter-spacing: -.022em;
+            line-height: 1.47059;
+            min-width: 150px;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-image 0.3s, border-color 0.3s;
+            margin: 0 10px;
+        }
+
+        .red-button:hover {
+            background-image: linear-gradient(#FF3333, #CC3333); /* Slightly darker red on hover */
+            border-color: #FF3333;
+            text-decoration: none;
+        }
+
+        .red-button:active {
+            background-image: linear-gradient(#CC0000, #990000); /* Dark red when clicked */
+            border-color: #990000;
+            outline: none;
+        }
+
+        .red-button:focus {
+            box-shadow: rgba(255, 0, 0, 0.5) 0 0 0 3px; /* Red box shadow on focus */
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text">
+        <h1>Principal Menu</h1>
+        <h3 class="select-option">Select an option:</h3>
+        <ul class="button-list">
+            <li><a href="{% url 'manage_queue' %}" class="menu-button">Manage Queue</a></li>
+            <li><a href="{% url 'queue_list' %}" class="menu-button">Queue List</a></li>
+            <li><a href="{% url 'report_list' %}" class="menu-button">Reports</a></li>
+        </ul>
+    </div> 
+    
+</body>
+</html>

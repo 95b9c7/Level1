@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue</title>
+    <link rel="stylesheet" href="{% static 'css/queue_list.css' %}">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.png' %}" alt="Company Logo" class="logo">
+        </div>
+        <div class="location">
+            <p>Level 1 Laredo, Tx</p>
+        </div>
+    </div>
+        <h1 class="queue-title">Current Queue</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Driver Name</th>
+                    <th>DOT Number</th>
+                    <th>Company</th>
+                    <th>Check-In Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for driver in drivers %}
+                <tr>
+                    <td>{{ driver.name }}</td>
+                    <td>{{ driver.dot_number }}</td>
+                    <td>{{ driver.company }}</td>
+                    <td>{{ driver.check_in_time}}</td>
+                    <td>{{ driver.status }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No drivers in queue</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <script>
+            setTimeout(function() {
+                window.location.reload();
+            }, 30000);
+            
+        </script>
+</body>
+</html>

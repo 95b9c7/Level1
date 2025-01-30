@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Queue</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+
+        .sign-out-button {
+            color: #fff; /* Text color for the button */
+            background-color: #f00; /* Background color for the button */
+            padding: 10px 20px; /* Adjust padding as needed */
+            border-radius: 5px; /* Add rounded corners */
+            text-decoration: none; /* Remove underline from the link */
+            margin-right: 20px; /* Add spacing between the button and text */
+            float: right; /* Float the button to the right */
+            font-weight: bold;
+        }
+        /* Define styles for the sign-out button on hover */
+        .sign-out-button:hover {
+            background-color: #ff0000; /* Change the background color on hover */
+            color: #fff; /* Change the text color on hover */
+            transform: scale(1.05); /* Add a scaling effect on hover (optional) */
+        }
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            /* You can specify multiple fonts in a fallback order, in case the first one isn't available */
+        }
+
+
+         /* Style for the text on the top left */
+         .top-right-text h1 {
+            margin: 0; /* Remove default margin to avoid extra spacing */
+            font-size: 24px; /* Adjust the font size as needed */
+            color: white; /* Text color */
+            font-weight: bold; /* Make it bold */
+        }
+
+
+        /* Style for the top blue bar */
+        .top-bar {
+            background-color: #15408c; /* Blue color */
+            height: 100px; /* Adjust the height as needed */
+            text-align: center;
+            display: flex;
+            justify-content: space-between; /* Align items in a row with space between them */
+            align-items: center; /* Vertically center items */
+            padding: 0 20px; /* Add some left and right padding for spacing */
+        }
+
+
+
+        .menu-button {
+            /* Apply the 'button-15' class styles to the menu buttons */
+            background-image: linear-gradient(#15408c, #849cc4);
+            border: 1px solid #0077CC;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 17px; /* Match the font size with your button styles */
+            font-weight: bold;
+            letter-spacing: -.022em;
+            line-height: 1.47059;
+            min-width: 150px; /* Set a minimum width for buttons */
+            padding: 10px 15px; /* Adjust padding as needed */
+            text-align: center;
+            text-decoration: none; /* Remove underlines from links */
+            white-space: nowrap;
+            transition: background-image 0.3s, border-color 0.3s; /* Add hover transition */
+            margin: 0 10px; /* Add space between buttons */
+        }
+        .menu-button:hover {
+            background-image: linear-gradient(#51A9EE, #147BCD);
+            border-color: #1482D0;
+            text-decoration: none;
+        }
+
+        .menu-button:active {
+            background-image: linear-gradient(#3D94D9, #0067B9);
+            border-color: #006DBC;
+            outline: none;
+        }
+
+        .menu-button:focus {
+            box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
+            outline: none;
+        }
+        
+                /* Add alternating row colors */
+                tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+
+        /* Style for the table */
+        .table {
+            width: 75%;
+            margin: 0 auto; /* Center the table horizontally */
+            padding: 20px; /* Add padding to the table */
+        }
+
+        /* Style for table headers */
+        .table th {
+            background-color: #15408c;
+            color: white;
+            font-weight: bold;
+            padding: 8px;
+            text-align: center; /* Center-align text within table headers */
+            border: 1px solid #ddd;
+        }
+
+        /* Style for table cells */
+        .table td {
+            padding: 8px;
+            text-align: center; /* Center-align text within table cells */
+            border: 1px solid #ddd;
+        }
+
+        /* Style for the center text */
+        .center-text {
+            text-align: center;
+        }
+
+        /* Style for the logo */
+        .logo {
+            width: 200px; /* Set the desired width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style for the table buttons */
+        .table-button {
+            background-color: #0077CC; /* Blue color */
+            color: white; /* Text color */
+            font-weight: bold; /* Make it bold */
+            padding: 6px 16px; /* Add padding */
+            text-decoration: none; /* Remove underlines from links */
+            border-radius: 4px; /* Add rounded corners */
+        }
+
+        /* Style for the table buttons on hover */
+        .table-button:hover {
+            background-color: #005fa3; /* Darker blue color */
+        }
+        .red-button {
+            background-image: linear-gradient(#FF0000, #CC0000); /* Red color gradient */
+            border: 1px solid #FF0000; /* Border color */
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 17px;
+            font-weight: bold;
+            letter-spacing: -.022em;
+            line-height: 1.47059;
+            min-width: 150px;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-image 0.3s, border-color 0.3s;
+            margin: 0 10px;
+        }
+
+        .red-button:hover {
+            background-image: linear-gradient(#FF3333, #CC3333); /* Slightly darker red on hover */
+            border-color: #FF3333;
+            text-decoration: none;
+        }
+
+        .red-button:active {
+            background-image: linear-gradient(#CC0000, #990000); /* Dark red when clicked */
+            border-color: #990000;
+            outline: none;
+        }
+
+        .red-button:focus {
+            box-shadow: rgba(255, 0, 0, 0.5) 0 0 0 3px; /* Red box shadow on focus */
+            outline: none;
+        }
+          
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <!-- Logo container -->
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.png' %}" class="logo">
+        </div>
+        <!-- Move the text to the top right -->        
+        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+
+    </div>
+    <div class="center-text" >
+        <h1>Manage Queue</h1>
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th>
+                        NAME
+                        <i class="fa fa-sort"></i>   
+                    </th>
+                    <th>
+                        TRUCK #
+                        <i class="fa fa-sort"></i>  
+                    </th>
+                    <th>
+                        COMPANY
+                        <i class="fa fa-sort"></i>  
+                    </th>
+                    <th>
+                        CHECK-IN TIME
+                        <i class="fa fa-sort"></i>  
+                    </th>
+                    <th>
+                        CHECK-IN DATE
+                        <i class="fa fa-sort"></i>  
+                    </th>
+                    <th>
+                        STATUS
+                        <i class="fa fa-sort"></i>  
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submissions %}
+                    <td>{{ submission.name }}</td>
+                    <td>{{ submis.dot_number }}</td>
+                    <td>{{ submission.company }}</td>                    
+                    <td>{{ submission.check_in_time }}</td>
+                    <td>{{ submission.check_in_date }}</td>
+                    <td>{{ submission.status }}</td>
+                    <td><a class="menu-button status-button in-progress-button"
+                        data-submission-id="{{ submission.id }}"
+                        data-new-status="In Progress">
+                        <i class="fa fa-hourglass-half"></i> In Progress</a></td> 
+                    <td><a class="red-button status-button finished-button"
+                        data-submission-id="{{ submission.id}}"
+                        data-new-status="Finished">
+                        <i class="fa fa-check"></i> Finished</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'menu' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            function sortTable(table, columnIndex) {
+                var rows = table.find('tbody tr').get();
+    
+                // Sort the rows based on the content of the selected column
+                rows.sort(function (a, b) {
+                    var cellA = $(a).find('td').eq(columnIndex).text();
+                    var cellB = $(b).find('td').eq(columnIndex).text();
+                    
+                    // Convert the cell values to numbers for comparison
+                    var numA = parseFloat(cellA);
+                    var numB = parseFloat(cellB);
+    
+                    // Handle NaN (non-numeric) values
+                    if (isNaN(numA) || isNaN(numB)) {
+                        return cellA.localeCompare(cellB);
+                    } else {
+                        return numA - numB;
+                    }
+                });
+    
+                // Reverse the order if already sorted in ascending order
+                if ($(table.find('thead th').get(columnIndex)).hasClass('asc')) {
+                    rows.reverse();
+                    $(table.find('thead th').get(columnIndex)).removeClass('asc').addClass('desc');
+                } else {
+                    $(table.find('thead th').get(columnIndex)).removeClass('desc').addClass('asc');
+                }
+    
+                // Reorder the rows in the table
+                $.each(rows, function (index, row) {
+                    table.children('tbody').append(row);
+                });
+            }
+    
+            // Add click event handlers to the sortable headers
+            $('table thead th').click(function () {
+                var table = $(this).closest('table');
+                var columnIndex = $(this).index();
+                sortTable(table, columnIndex);
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('status-button')) {
+                const submissionId = e.target.getAttribute('data-submission-id');
+                const newStatus = e.target.getAttribute('data-new-status');
+
+                // Send an AJAX request to update the status
+                updateStatus(submissionId, newStatus);
+            }
+        });
+
+        function updateStatus(submissionId, newStatus) {
+            // Create an XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+            
+            // Configure the request
+            xhr.open('POST', '/update_status/', true);  // Replace with your Django URL
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+            // Set up the callback function to handle the response
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Success - Update the status on the page (you can do this dynamically)
+                    alert('Status updated to ' + newStatus);
+                } else {
+                    // Error - Handle the error, such as showing a message
+                    alert('Error updating status');
+                }
+            };
+
+            // Create a form data object and send it
+            const formData = new FormData();
+            formData.append('submission_id', submissionId);
+            formData.append('new_status', newStatus);
+            xhr.send(formData);
+        }
+
+        // Function to get the CSRF token (replace with your actual function)
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    </script>
+</body>
+</html>

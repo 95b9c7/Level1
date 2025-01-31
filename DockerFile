@@ -23,8 +23,5 @@ RUN python manage.py collectstatic --noinput
 # Expose the port the app runs on
 EXPOSE 8000
 
-# Ensure Gunicorn is installed
-RUN pip install gunicorn
-
 # Command to run the application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "TruckerWaitList.wsgi:application"]

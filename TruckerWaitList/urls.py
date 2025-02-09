@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
 from django.conf.urls.static import static
 from waitapp import views
 from django.contrib.auth.views import LoginView
@@ -30,3 +31,5 @@ urlpatterns = [
     path('update_status/', views.update_status, name='update_status'),
     path('report_list/', views.report_list, name='report_list'),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

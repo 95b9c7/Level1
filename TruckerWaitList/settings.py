@@ -21,7 +21,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-secret-key")
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "level1-production.up.railway.app,.railway.app,localhost,127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS = [
     "https://level1-production.up.railway.app",  # Be sure to replace with actual domain

@@ -30,8 +30,6 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic', 
     'waitapp',
 ]
 

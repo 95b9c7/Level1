@@ -1,0 +1,196 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #15408C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    z-index: 9999;
+    animation: fadeOut 3s forwards;
+}
+
+.splash-content {
+    text-align: center;
+    color: #ffffff;
+}
+
+.logo {
+    max-height: 250px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+p {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sleek-form {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding and border in element dimensions */
+}
+.btn-submit {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit:hover {
+    background: #0056b3;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none; /* Hide the splash screen after fading out */
+        z-index: -1;
+    }
+}
+
+.body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;    
+    font-weight: 300;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #15408C;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.top-bar .logo-container img {
+    max-height: 100px;
+    margin-bottom: 0;
+}
+
+.top-bar .location p {
+    font-weight: bold;
+    font-size: 25px;
+    margin: 0;
+}
+
+.form-title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 35px;
+    margin: 0;
+}
+
+.form-subtitle{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:lighter;
+    font-size: 20px;
+    margin: 0;
+}
+
+.center-text {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 15px;
+}
+
+.queue-title {
+            text-align: center;
+            font-size: 35px;
+            margin: 20px 0;
+        }
+        
+        /* Style the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            background: #f3f3f3;
+        }
+        
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+        
+        table th {
+            font-weight: bold;
+        }
+        
+        /* Style the rows */
+        table tbody tr:nth-child(even) {
+            background: #fff;
+        }
+        
+        table tbody tr:nth-child(odd) {
+            background: #f3f3f3;
+        }
+        
+        /* Center text in table cells */
+        table td {
+            text-align: center;
+        }
+        
+        /* Style the "No drivers in queue" message */
+        table td[colspan="4"] {
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+        }

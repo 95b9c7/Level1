@@ -74,15 +74,15 @@ def update_status(request):
 
             if new_status == 'In Progress' and original_status != 'In Progress':
                 submission.status = 'In Progress'
-                submission.in_progress_time = datetime.now().time()
-                submission.in_progress_date = datetime.now().date()
+                submission.in_progress_time = timezone.now().time()
+                submission.in_progress_date = timezone.now().date()
                 submission.in_progress_employee = request.user.username
                 submission.save()
 
             elif new_status == 'Finished' and original_status != 'Finished':
                 submission.status = 'Finished'
-                submission.finished_time = datetime.now().time()
-                submission.finished_date = datetime.now().date()
+                submission.finished_time = timezone.now().time()
+                submission.finished_date = timezone.now().date()
                 submission.finished_employee = request.user.username
                 submission.save()
                 notify_company(submission)

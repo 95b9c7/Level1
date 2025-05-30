@@ -1,4 +1,5 @@
 from .models import TruckDriver
+from .models import Company
 from django import forms
 
 
@@ -87,13 +88,12 @@ COMPANY_CHOICES = [
 ]
 
 class TruckDriverForm(forms.ModelForm):
-    company = forms.ChoiceField(
+    company = forms.ModelChoiceField(
         label='Company',
-        choices=COMPANY_CHOICES,
-        widget=forms.Select(attrs={
-            'class': 'form-control',
-        }),        
-        required=True
+        queryset=Company.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True,
+        empty_label='Select a company...'
     )
     class Meta:
         model = TruckDriver
@@ -107,9 +107,10 @@ class MasterReportForm(forms.Form):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    company = forms.ChoiceField(
-        label='Company', 
+    company = forms.ModelChoiceField(
+        label='Company',
+        queryset=Company.objects.all().order_by('name'),
         required=False,
-        choices=COMPANY_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-control'})
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        empty_label='All Companies'
     )

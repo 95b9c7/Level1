@@ -8,9 +8,28 @@ import os
 from django.utils import timezone
 import openpyxl
 from openpyxl import Workbook
-
+from django.core.mail import send_mail
+from .models import Company
 
 # Create your views here.
+
+def notify_company(driver):
+    if driver.company and driver.company.contact_email:
+        subject = f"Drug Test Completed: {driver.name}"
+        message = (
+            f"Hello {driver.company.name},\n\n"
+            f"{driver.name} has completed a drug test on {driver.finished_date} at {driver.finished_time}.\n\n"
+            f"Thank you,\nTrucker Wait List System"
+        )
+
+        send_mail(
+            subject,
+            message,
+            'no-reply@truckerapp.com',  # You can customize this
+            [driver.company.contact_email],
+            fail_silently=False,
+        )
+
 def driver_form(request):
     if request.method == 'POST':
         form = TruckDriverForm(request.POST)
@@ -51,19 +70,42 @@ def update_status(request):
         try:
             submission = get_object_or_404(TruckDriver, id=submission_id)
 
-            if new_status == 'In Progress' and submission.status != 'In Progress':
+            original_status = submission.status
+
+            if new_status == 'In Progress' and original_status != 'In Progress':
                 submission.status = 'In Progress'
                 submission.in_progress_time = datetime.now().time()
                 submission.in_progress_date = datetime.now().date()
-                submission.in_progress_employee = request.user.username  # Set the user who changed it to 'In Progress'
-                
-            elif new_status == 'Finished' and submission.status != 'Finished':
+                submission.in_progress_employee = request.user.username
+                submission.save()
+
+            elif new_status == 'Finished' and original_status != 'Finished':
                 submission.status = 'Finished'
                 submission.finished_time = datetime.now().time()
                 submission.finished_date = datetime.now().date()
-                submission.finished_employee = request.user.username  # Set the user who changed it to 'Finished'
+                submission.finished_employee = request.user.username
+                submission.save()
+                notify_company(submission)
                 
-            submission.save()
+
+                if submission.company and submission.company.tests_remaining > 0:
+                    submission.company.tests_remaining -= 1
+                    submission.company.save()
+
+                    if submission.company.tests_remaining <= 5:
+                        send_mail(
+                            subject=f"Low Test Balance Alert for {submission.company.name}",
+                            message=(
+                                f"Hello {submission.company.name},\n\n"
+                                f"You have {submission.company.tests_remaining} drug tests remaining.\n"
+                                f"Please consider purchasing more tests to avoid interruptions.\n\n"
+                                f"— Trucker Wait List System"
+                            ),
+                            from_email='no-reply@truckerapp.com',
+                            recipient_list=[submission.company.contact_email],
+                            fail_silently=True,
+                        )
+
             return JsonResponse({'success': True})
         except TruckDriver.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Submission not found'})
@@ -94,7 +136,7 @@ def report_list(request):
                     'Check In Date', 'In Progress Time', 'In Progress Date', 'In Progress Employee',
                     'Finished Time', 'Finished Date', 'Finished Employee'])
         for driver in drivers:
-            ws.append([driver.name, driver.company, 
+            ws.append([driver.name, driver.company.name if driver.company else '', 
                         driver.status, driver.check_in_time, driver.check_in_date,  
                         driver.in_progress_time, driver.in_progress_date, driver.in_progress_employee,
                         driver.finished_time, driver.finished_date, driver.finished_employee])

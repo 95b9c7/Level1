@@ -135,3 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if DEBUG:
     INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'service@level1da.com'
+EMAIL_HOST_PASSWORD = ''  # Or App Password if 2FA is enabled
+DEFAULT_FROM_EMAIL = 'service@level1da.com'

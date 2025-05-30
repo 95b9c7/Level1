@@ -4,7 +4,8 @@ from django.db import models
 class TruckDriver(models.Model):
     name = models.CharField(max_length=200, default='-')
     #dot_number = models.CharField(max_length=200, default='-')
-    company = models.CharField(max_length=200, default='-')
+    #company_name = models.CharField(max_length=200, default='-')
+    company = models.ForeignKey('Company', null=True, blank=True, on_delete=models.SET_NULL)
     check_in_date = models.DateField(auto_now_add=True)
     check_in_time = models.TimeField(auto_now_add=True)
     status = models.CharField(max_length=200, default='Waiting')
@@ -14,3 +15,13 @@ class TruckDriver(models.Model):
     finished_date = models.DateField(null=True, blank=True)
     finished_time = models.TimeField(null=True, blank=True)
     finished_employee = models.CharField(max_length=200, default='-')
+
+class Company(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    contact_email = models.EmailField()
+    total_tests = models.IntegerField(default=0)
+    tests_remaining = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+    

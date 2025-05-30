@@ -34,9 +34,11 @@ def driver_form(request):
     if request.method == 'POST':
         form = TruckDriverForm(request.POST)
         if form.is_valid():
-            # Do something with the form data, e.g., save it to the database
-            form.save()
-
+            driver = form.save(commit=False)
+            now = timezone.localtime()
+            driver.check_in_time = now.time()
+            driver.check_in_date = now.date()
+            driver.save()
             return render(request, 'success.html')
     else:
         form = TruckDriverForm()

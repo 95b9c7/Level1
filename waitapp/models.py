@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class TruckDriver(models.Model):
     name = models.CharField(max_length=200, default='-')
-    dot_number = models.CharField(max_length=200, default='-')
+    #dot_number = models.CharField(max_length=200, default='-')
     company = models.CharField(max_length=200, default='-')
     check_in_date = models.DateField(auto_now_add=True)
     check_in_time = models.TimeField(auto_now_add=True)

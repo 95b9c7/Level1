@@ -207,10 +207,6 @@
                         <i class="fa fa-sort"></i>   
                     </th>
                     <th>
-                        TRUCK #
-                        <i class="fa fa-sort"></i>  
-                    </th>
-                    <th>
                         COMPANY
                         <i class="fa fa-sort"></i>  
                     </th>
@@ -233,7 +229,6 @@
             <tbody>
                 {% for submission in submissions %}
                     <td>{{ submission.name }}</td>
-                    <td>{{ submis.dot_number }}</td>
                     <td>{{ submission.company }}</td>                    
                     <td>{{ submission.check_in_time }}</td>
                     <td>{{ submission.check_in_date }}</td>

@@ -14,11 +14,15 @@ from pathlib import Path
 from dotenv import load_dotenv
 from pathlib import Path
 import dj_database_url
-
+import environ
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-secret-key")
 DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
@@ -27,7 +31,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://level1-production.up.railway.app",  # Be sure to replace with actual domain
 ]
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    #'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': env.db(),
 }
 
 # Application definition
@@ -39,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'whitenoise.runserver_nostatic', 
     'waitapp',
 ]
 
@@ -111,10 +115,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 # Static
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    ]
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -130,4 +131,7 @@ LOGIN_REDIRECT_URL = '/menu/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if DEBUG:
+    INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
 

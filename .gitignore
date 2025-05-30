@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Virtual Environment
+.venv/
+
+# Environment Variables
+.env
+
+# VS Code settings
+.vscode/

@@ -14,7 +14,11 @@ from .models import Company
 # Create your views here.
 
 def notify_company(driver):
-    if driver.company and driver.company.contact_email:
+    if (
+        driver.company 
+        and driver.company.contact_email
+        and driver.company.contact_email.lower() != "placeholder@example.com"
+        ):
         subject = f"Drug Test Completed: {driver.name}"
         message = (
             f"Hello {driver.company.name},\n\n"
@@ -25,9 +29,9 @@ def notify_company(driver):
         send_mail(
             subject,
             message,
-            'no-reply@truckerapp.com',  # You can customize this
+            'zrincon@level1da.com',  # You can customize this
             [driver.company.contact_email],
-            fail_silently=False,
+            fail_silently=True,
         )
 
 def driver_form(request):
@@ -105,7 +109,7 @@ def update_status(request):
                                 f"Please consider purchasing more tests to avoid interruptions.\n\n"
                                 f"— Trucker Wait List System"
                             ),
-                            from_email='no-reply@truckerapp.com',
+                            from_email='zrincon@level1da.com',
                             recipient_list=[submission.company.contact_email],
                             fail_silently=True,
                         )

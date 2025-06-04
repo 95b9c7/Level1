@@ -6,172 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <style>
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            /* You can specify multiple fonts in a fallback order, in case the first one isn't available */
-            background-color: #15408c;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .center-text {
-            text-align: center;
-        }
-
-        .subtitle {
-            font-size: 20px; /* Adjust the size as needed */
-            margin-top: 10px; /* Add space between title and subtitle */
-            font-weight: bold;
-        }
-
-        /* Style for the text on the top left */
-        .top-right-text h1 {
-            margin: 0; /* Remove default margin to avoid extra spacing */
-            font-size: 24px; /* Adjust the font size as needed */
-            color: white; /* Text color */
-            font-weight: bold; /* Make it bold */
-        }
-
-        .logo {
-            width: 400px; /* Set the desired width */
-            height: auto; /* Maintain aspect ratio */
-        }
-        /* Style for the top blue bar */
-        .top-bar {
-            background-color: #15408c; /* Blue color */
-            height: 100px; /* Adjust the height as needed */
-            text-align: center;
-            display: flex;
-            justify-content: space-between; /* Align items in a row with space between them */
-            align-items: center; /* Vertically center items */
-            padding: 0 20px; /* Add some left and right padding for spacing */
-        }
-
-        /* Style for the Login form */
-        .login-form {
-            text-align: center; /* Center the form content */
-        }
-
-        /* Style for the username and password fields */
-        .login-field {
-            margin: 10px; /* Add space between fields */
-        }
-
-        /* Style for the Login button */
-        button[type="submit"] {
-            /* Apply the 'button-15' class styles */
-            background-image: linear-gradient(#15408c, #849cc4);
-            border: 1px solid #0077CC;
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            cursor: pointer;
-            direction: ltr;
-            display: inline-block;
-            font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-size: 17px;
-            font-weight: bold;
-            letter-spacing: -.022em;
-            line-height: 1.47059;
-            min-width: 30px;
-            overflow: visible;
-            padding: 4px 15px;
-            text-align: center;
-            vertical-align: baseline;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            white-space: nowrap;
-        }
-
-        /* Apply 'button-15' styles when the button is disabled */
-        button[type="submit"]:disabled {
-            cursor: default;
-            opacity: .3;
-        }
-
-        /* Apply 'button-15' styles on hover */
-        button[type="submit"]:hover {
-            background-image: linear-gradient(#51A9EE, #147BCD);
-            border-color: #1482D0;
-            text-decoration: none;
-        }
-
-        /* Apply 'button-15' styles when the button is active (clicked) */
-        button[type="submit"]:active {
-            background-image: linear-gradient(#3D94D9, #0067B9);
-            border-color: #006DBC;
-            outline: none;
-        }
-
-        /* Apply 'button-15' styles when the button is focused */
-        button[type="submit"]:focus {
-            box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
-            outline: none;
-        }
-        /* Style for the Login form container */
-        .login-container {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px; /* Adjust the maximum width as needed */
-            width: 100%; /* Ensure the container takes up available width */
-            box-sizing: border-box; /* Ensure padding and borders are included in the width */
-            margin: 0 20px; /* Add some horizontal margin for spacing */
-        }
-
-        .login-container h2 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .login-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box; /* Include padding and borders in width calculation */
-        }
-
-        .login-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 12px 20px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .login-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
-<body>
-    <div class="top-bar">
-        <!-- Logo container -->
+<body class="login-page">
+    <div class="login-wrapper">
         <div class="logo-container">
             <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
         </div>
-    </div>
-    <div class="login-container">
-        <h2>Welcome Back</h2>
-        <form method="post" class="login-form">
-            {% csrf_token %}
-            <input type="text" name="username" class="login-field" placeholder="Username" required>
-            <input type="password" name="password" class="login-field" placeholder="Password" required>
-            <button type="submit" class="login-button">Login</button>
-        </form>
+        <div class="login-container">
+            <h2>Welcome to Level 1!</h2>
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <input type="text" name="username" class="login-field" placeholder="Username" required>
+                <input type="password" name="password" class="login-field" placeholder="Password" required>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

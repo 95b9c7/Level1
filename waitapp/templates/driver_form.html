@@ -5,31 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check In</title>
-    <link rel="stylesheet" href="{% static 'css/splash.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     
 </head>
 <body>
     <div class="top-bar">
         <div class="logo-container">
             <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="logo">
-        </div>
-        <div class="location">
-            <p>Laredo, Tx</p>
-        </div>
+        </div> 
     </div>
     <div class="splash-screen">
         <div class="splash-content">
-            <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="logo">
+            <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="splash-logo">
             <h1>Welcome!</h1>
         </div>
     </div>
     <div class="center-text">
-        <h2 class="form-title">Driver Check-In</h2>
-        <h3 class="form-subtitle">Please fill out the form below to check-in</h3>
+        <h1>Driver Check-In</h1>
+        <h3 class="select-option">Please fill out the form below to check-in</h3>
     </div>
     
     <div class="form-container">
-    
         <form method="post" class="sleek-form">
             {% csrf_token %}
             <div class="form-group">
@@ -43,7 +39,7 @@
             </div>
 
             {{ form.errors }}
-            <button type="submit" class="btn-submit">Submit</button>
+            <button type="submit" class="menu-button">Submit</button>
         </form>
     </div>
 </body>

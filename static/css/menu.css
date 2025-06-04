@@ -1,0 +1,374 @@
+    /* General Body Styling */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: #f4f6f9;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Bar/Header */
+.top-bar {
+    background-color: #133c82;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    height: 60px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo-container img.logo {
+    height: 50px;
+    
+}
+
+/* Sign Out Button */
+.sign-out-button {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sign-out-button:hover {
+    background: white;
+    color: #133c82;
+}
+
+/* Centered Text Section */
+.center-text {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centers children horizontally */
+}
+.center-text h1 {
+    font-size: 32px;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+.center-text .select-option {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Button List Styling */
+.button-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.menu-button {
+    background: white;
+    color: #133c82;
+    font-size: 16px;
+    padding: 12px 26px;
+    border: 2px solid #133c82;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+    background: #133c82;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(19, 60, 130, 0.2);
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    color: white;
+    font-weight: 500;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* manage_queue.css*/
+/* Style for the table */
+        .table {
+            width: 75%;
+            margin: 0 auto; /* Center the table horizontally */
+            padding: 20px; /* Add padding to the table */
+        }
+
+        /* Style for table headers */
+        .table th {
+            background-color: #15408c;
+            color: white;
+            font-weight: bold;
+            padding: 8px;
+            text-align: center; /* Center-align text within table headers */
+            border: 1px solid #ddd;
+        }
+
+        /* Style for table cells */
+        .table td {
+            padding: 8px;
+            text-align: center; /* Center-align text within table cells */
+            border: 1px solid #ddd;
+        }
+
+        /* Style for the center text */
+        .center-text {
+            text-align: center;
+        }
+
+        /* Style for the logo */
+        .logo {
+            width: 200px; /* Set the desired width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style for the table buttons */
+        .table-button {
+            background-color: #0077CC; /* Blue color */
+            color: white; /* Text color */
+            font-weight: bold; /* Make it bold */
+            padding: 6px 16px; /* Add padding */
+            text-decoration: none; /* Remove underlines from links */
+            border-radius: 4px; /* Add rounded corners */
+        }
+
+        /* Style for the table buttons on hover */
+        .table-button:hover {
+            background-color: #005fa3; /* Darker blue color */
+        }
+.queue-button {
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+/* In Progress – outlined blue */
+.in-progress-button {
+    background: white;
+    color: #133c82;
+    border: 2px solid #133c82;
+}
+
+.in-progress-button:hover {
+    background: #133c82;
+    color: white;
+}
+
+/* Finished – solid red */
+.finished-button {
+    background: #e50914;
+    color: white;
+    border: none;
+}
+
+.finished-button:hover {
+    background: #b00610;
+}
+
+/* driver_form.html */
+
+/* Driver Form Splash */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #15408C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+    0%, 60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        z-index: -1;
+    }
+}
+
+.splash-content {
+    text-align: center;
+    color: white;
+}
+
+.splash-logo {
+    max-height: 200px;
+    margin-bottom: 20px;
+}
+
+/* Form Layout */
+.form-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.sleek-form {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    max-width: 420px;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #333;
+    font-size: 15px;
+}
+
+.sleek-form input,
+.sleek-form select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.sleek-form input:focus,
+.sleek-form select:focus {
+    outline: none;
+    border-color: #133c82;
+    box-shadow: 0 0 0 3px rgba(19, 60, 130, 0.1);
+}
+
+/* Submit Button Consistent with .menu-button */
+.sleek-form .menu-button {
+    background: white;
+    color: #133c82;
+    font-size: 16px;
+    padding: 12px 26px;
+    border: 2px solid #133c82;
+    border-radius: 30px;
+    font-weight: 500;
+    width: 100%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.sleek-form .menu-button:hover {
+    background: #133c82;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(19, 60, 130, 0.2);
+}
+
+/* Elfsight Widget Container */
+.elfsight-app-53fa6fc2-d129-4566-b12d-1593aaf09912 {
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    width: 100%;
+}
+
+/* Optional: Smooth fade-in or animation */
+.elfsight-app-53fa6fc2-d129-4566-b12d-1593aaf09912 iframe {
+    border: none;
+    width: 100% !important;
+    max-height: 550px;
+}
+
+/* queue_list.css */
+.queue-title {
+    text-align: center;
+    font-size: 35px;
+    margin: 20px 0;
+}
+
+/* Style the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background: #f3f3f3;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+table th {
+    font-weight: bold;
+}
+
+/* Style the rows */
+table tbody tr:nth-child(even) {
+    background: #fff;
+}
+
+table tbody tr:nth-child(odd) {
+    background: #f3f3f3;
+}
+
+/* Center text in table cells */
+table td {
+    text-align: center;
+}
+
+/* Style the "No drivers in queue" message */
+table td[colspan="5"] {
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+/* report_list.html */
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.menu-button {
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+}

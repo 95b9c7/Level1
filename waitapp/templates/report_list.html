@@ -2,185 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Report</title>
-    <style>
-
-        .sign-out-button {
-            color: #fff; /* Text color for the button */
-            background-color: #f00; /* Background color for the button */
-            padding: 10px 20px; /* Adjust padding as needed */
-            border-radius: 5px; /* Add rounded corners */
-            text-decoration: none; /* Remove underline from the link */
-            margin-right: 20px; /* Add spacing between the button and text */
-            float: right; /* Float the button to the right */
-            font-weight: bold;
-        }
-        /* Define styles for the sign-out button on hover */
-        .sign-out-button:hover {
-            background-color: #ff0000; /* Change the background color on hover */
-            color: #fff; /* Change the text color on hover */
-            transform: scale(1.05); /* Add a scaling effect on hover (optional) */
-        }
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            /* You can specify multiple fonts in a fallback order, in case the first one isn't available */
-        }
-
-
-         /* Style for the text on the top left */
-         .top-right-text h1 {
-            margin: 0; /* Remove default margin to avoid extra spacing */
-            font-size: 24px; /* Adjust the font size as needed */
-            color: white; /* Text color */
-            font-weight: bold; /* Make it bold */
-        }
-
-
-        /* Style for the top blue bar */
-        .top-bar {
-            background-color: #15408c; /* Blue color */
-            height: 100px; /* Adjust the height as needed */
-            text-align: center;
-            display: flex;
-            justify-content: space-between; /* Align items in a row with space between them */
-            align-items: center; /* Vertically center items */
-            padding: 0 20px; /* Add some left and right padding for spacing */
-        }
-
-        /* Style for the center text */
-        .center-text {
-            text-align: center;
-        }
-
-        /* Style for the logo */
-        .logo {
-            width: 200px; /* Set the desired width */
-            height: auto; /* Maintain aspect ratio */
-        }
-
-        .header {
-            background-color: #333; /* Header background color */
-            color: #fff; /* Text color for the header */
-        }
-
-        /* Style for form container */
-        .form-container {
-            background-color: #f2f2f2; /* Light gray background */
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px auto;
-            max-width: 600px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Style for labels */
-        label {
-            font-weight: bold; /* Make labels bold */
-            color: #333; /* Dark gray text color */
-            margin-right: 10px;
-        }
-
-        /* Style for input fields */
-        input[type="date"], select {
-            background-color: white; /* White background for input fields */
-            border: 1px solid #0077CC; /* Blue border */
-            border-radius: 4px;
-            padding: 5px;
-            margin: 5px;
-        }
-
-        /* Style for the "to" label in date ranges */
-        label[for*="end_date"], label[for*="end_tdate"], label[for*="end_fdate"] {
-            color: #0077CC; /* Blue text color for "to" labels */
-        }
-
-        
-        .menu-button {
-            background-image: linear-gradient(#15408c, #849cc4);
-            border: 1px solid #0077CC;
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            cursor: pointer;
-            font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-size: 17px;
-            font-weight: bold;
-            letter-spacing: -.022em;
-            line-height: 1.47059;
-            min-width: 150px;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: background-image 0.3s, border-color 0.3s;
-            margin: 0 10px;
-            display: inline-block; /* Ensure inline-block display for sizing */
-            width: auto; /* Auto width */
-            margin-top: 20px;
-        }
-        .menu-button:hover {
-            background-image: linear-gradient(#51A9EE, #147BCD);
-            border-color: #1482D0;
-            text-decoration: none;
-        }
-
-        .menu-button:active {
-            background-image: linear-gradient(#3D94D9, #0067B9);
-            border-color: #006DBC;
-            outline: none;
-        }
-
-        .menu-button:focus {
-            box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
-            outline: none;
-        }
-                /* Add alternating row colors */
-                tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .red-button {
-            background-image: linear-gradient(#FF0000, #CC0000); /* Red color gradient */
-            border: 1px solid #FF0000; /* Border color */
-            border-radius: 4px;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            cursor: pointer;
-            font-family: "SF Pro Text", "SF Pro Icons", "AOS Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 17px;
-            font-weight: bold;
-            letter-spacing: -.022em;
-            line-height: 1.47059;
-            min-width: 150px;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: background-image 0.3s, border-color 0.3s;
-            margin: 0 10px;
-        }
-
-        .red-button:hover {
-            background-image: linear-gradient(#FF3333, #CC3333); /* Slightly darker red on hover */
-            border-color: #FF3333;
-            text-decoration: none;
-        }
-
-        .red-button:active {
-            background-image: linear-gradient(#CC0000, #990000); /* Dark red when clicked */
-            border-color: #990000;
-            outline: none;
-        }
-
-        .red-button:focus {
-            box-shadow: rgba(255, 0, 0, 0.5) 0 0 0 3px; /* Red box shadow on focus */
-            outline: none;
-        }
-          
-    </style>
 </head>
 <body>
     <div class="top-bar">
@@ -188,31 +15,40 @@
         <div class="logo-container">
             <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
         </div>
-        <!-- Move the text to the top right -->        
-        <a href="{% url 'login' %}" class="red-button"><i class="fa fa-sign-out"></i> Sign Out</a>
+        <div class="top-bar-right">
+            <a href="{% url 'login' %}" class="sign-out-button">
+                <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+        </div>
+    </div>
+    <div class="center-text">
+        <h1>Master Report Menu</h1>
+    </div>
+    <div class="form-container">
+        <form method="POST" class="sleek-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                {{ form.status.label_tag }}
+                {{ form.status }}
+            </div>
 
+            <div class="form-group">
+                {{ form.company.label_tag }}
+                {{ form.company }}
+            </div>
+
+            <div class="button-row">
+                <a href="{% url 'menu' %}" class="menu-button">
+                    <i class="fa fa-arrow-left"></i> Back
+                </a>
+                <button type="submit" class="menu-button">
+                    <i class="fas fa-file-alt"></i> Generate Report
+                </button>
+            </div>
+        </form>
     </div>
-    <div class="center-text" >
-  <h1>Master Report Menu</h1>
-  <div class="form-container">
-  <form method="POST">
-    {% csrf_token %}
-    <div >
-        {{ form.status.label_tag }}
-        {{ form.status }}
-    </div>
-    <div>
-        {{ form.company.label_tag }}
-        {{ form.company }}
-    </div>
-    
-    
-    <!-- Add more filter criteria fields here as needed -->
-    <a href="{% url 'menu' %}" class="menu-button"><i class="fa fa-arrow-left"></i> Back</a>
-    <button class="menu-button"><i class="fas fa-file-alt"></i> Generate Report</button>
-  </form>
-  </div>
-    </div>
+                </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </body>
 </html>

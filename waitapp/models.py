@@ -18,7 +18,7 @@ class TruckDriver(models.Model):
 
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    contact_email = models.EmailField()
+    contact_email = models.EmailField(blank=True, null=True)  # ✅ allow blank
     total_tests = models.IntegerField(default=0)
     tests_remaining = models.IntegerField(default=0)
 

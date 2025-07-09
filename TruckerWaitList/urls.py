@@ -30,6 +30,7 @@ urlpatterns = [
     path('manage_queue/', views.manage_queue, name='manage_queue'),
     path('update_status/', views.update_status, name='update_status'),
     path('report_list/', views.report_list, name='report_list'),
+    path('add_company/', views.add_company, name='add_company'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

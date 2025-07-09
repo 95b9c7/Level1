@@ -372,3 +372,25 @@ table td[colspan="5"] {
     text-align: center;
     white-space: nowrap;
 }
+
+
+@media (max-width: 480px) {
+    .top-bar {
+        justify-content: center;
+    }
+
+    .logo-container {
+        text-align: center;
+        width: 100%;
+    }
+
+    .logo-container img.logo {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .splash-logo {
+        max-height: 100px;
+    }
+}
+

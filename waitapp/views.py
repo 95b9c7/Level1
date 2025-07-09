@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse, get_list_or_404, get_object_or_404
-from .forms import TruckDriverForm, MasterReportForm
+from .forms import TruckDriverForm, MasterReportForm, CompanyForm
 from .models import TruckDriver
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -10,6 +10,8 @@ import openpyxl
 from openpyxl import Workbook
 from django.core.mail import send_mail
 from .models import Company
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -67,58 +69,56 @@ def manage_queue(request):
 
     return render(request, 'manage_queue.html', {'submissions': submissions})
 
-@login_required
+@require_POST
+@login_required 
 def update_status(request):
-    if request.method == 'POST':
-        submission_id = request.POST.get('submission_id')
-        new_status = request.POST.get('new_status')
+    submission_id = request.POST.get('submission_id')
+    new_status = request.POST.get('new_status')
 
-        try:
-            submission = get_object_or_404(TruckDriver, id=submission_id)
+    try:
+        submission = get_object_or_404(TruckDriver, id=submission_id)
+        original_status = submission.status
 
-            original_status = submission.status
+        if new_status == 'In Progress' and original_status != 'In Progress':
+            submission.status = 'In Progress'
+            now = timezone.localtime()
+            submission.in_progress_time = now.time()
+            submission.in_progress_date = now.date()
+            submission.in_progress_employee = request.user.username
+            submission.save()
 
-            if new_status == 'In Progress' and original_status != 'In Progress':
-                submission.status = 'In Progress'
-                now = timezone.localtime()
-                submission.in_progress_time = now.time()
-                submission.in_progress_date = now.date()
-                submission.in_progress_employee = request.user.username
-                submission.save()
+        elif new_status == 'Finished' and original_status != 'Finished':
+            submission.status = 'Finished'
+            now = timezone.localtime()
+            submission.finished_time = now.time()
+            submission.finished_date = now.date()
+            submission.finished_employee = request.user.username
+            submission.save()
 
-            elif new_status == 'Finished' and original_status != 'Finished':
-                submission.status = 'Finished'
-                now = timezone.localtime()
-                submission.finished_time = now.time()
-                submission.finished_date = now.date()
-                submission.finished_employee = request.user.username
-                submission.save()
-                notify_company(submission)
-                
+            notify_company(submission)  # your custom notification logic
 
-                if submission.company and submission.company.tests_remaining > 0:
-                    submission.company.tests_remaining -= 1
-                    submission.company.save()
+            if submission.company and submission.company.tests_remaining > 0:
+                submission.company.tests_remaining -= 1
+                submission.company.save()
 
-                    if submission.company.tests_remaining <= 5:
-                        send_mail(
-                            subject=f"Low Test Balance Alert for {submission.company.name}",
-                            message=(
-                                f"Hello {submission.company.name},\n\n"
-                                f"You have {submission.company.tests_remaining} drug tests remaining.\n"
-                                f"Please consider purchasing more tests to avoid interruptions.\n\n"
-                                f"— Trucker Wait List System"
-                            ),
-                            from_email='zrincon@level1da.com',
-                            recipient_list=[submission.company.contact_email],
-                            fail_silently=True,
-                        )
+                if submission.company.tests_remaining <= 5:
+                    send_mail(
+                        subject=f"Low Test Balance Alert for {submission.company.name}",
+                        message=(
+                            f"Hello {submission.company.name},\n\n"
+                            f"You have {submission.company.tests_remaining} drug tests remaining.\n"
+                            f"Please consider purchasing more tests to avoid interruptions.\n\n"
+                            f"— Trucker Wait List System"
+                        ),
+                        from_email='zrincon@level1da.com',
+                        recipient_list=[submission.company.contact_email],
+                        fail_silently=True,
+                    )
 
-            return JsonResponse({'success': True})
-        except TruckDriver.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Submission not found'})
-        
-    return JsonResponse({'success': False, 'error': 'Invalid request'})
+        return JsonResponse({'success': True})
+
+    except TruckDriver.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Submission not found'}, status=404)
 
 
 @login_required
@@ -157,3 +157,21 @@ def report_list(request):
     else:
         form = MasterReportForm()
     return render(request, 'report_list.html', {'form': form})
+
+@login_required
+def add_company(request):
+    if request.method == 'POST':
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            company = form.save(commit=False)
+
+            # ✅ Set placeholder email if left blank
+            if not company.contact_email:
+                company.contact_email = 'placeholder@example.com'
+
+            company.save()
+            return redirect('menu')
+    else:
+        form = CompanyForm()
+
+    return render(request, 'add_company.html', {'form': form})

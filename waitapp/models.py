@@ -15,7 +15,9 @@ class TruckDriver(models.Model):
     finished_date = models.DateField(null=True, blank=True)
     finished_time = models.TimeField(null=True, blank=True)
     finished_employee = models.CharField(max_length=200, default='-')
-
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    is_follow_up = models.BooleanField(default=False)
+    
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contact_email = models.EmailField(blank=True, null=True)  # ✅ allow blank

@@ -11,6 +11,14 @@ STATUS_CHOICES = [
 ]
 
 class TruckDriverForm(forms.ModelForm):
+    class Meta:
+        model = TruckDriver
+        fields = ['name', 'company', 'phone_number', 'is_follow_up']
+    name = forms.CharField(
+        label='Driver Name', 
+        max_length=200,
+        required=True
+    )
     company = forms.ModelChoiceField(
         label='Company',
         queryset=Company.objects.all().order_by('name'),
@@ -18,11 +26,23 @@ class TruckDriverForm(forms.ModelForm):
         required=True,
         empty_label='Select a company...'
     )
-    class Meta:
-        model = TruckDriver
-        fields = ['name', 'company']
-    name = forms.CharField(label='Driver Name', max_length=200,required=True)
-    
+    phone_number = forms.CharField(
+        label='Phone Number',
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter phone number'
+        })
+    )
+
+    is_follow_up = forms.BooleanField(
+        label='Follow-up?',
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+
+
 class MasterReportForm(forms.Form):
     status = forms.ChoiceField(
         label='Status',

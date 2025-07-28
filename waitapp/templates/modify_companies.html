@@ -4,70 +4,111 @@
 {% block title %}Modify Companies{% endblock %}
 
 {% block content %}
-    
     <div class="center-text">
         <h1>Modify Companies</h1>
         <h3 class="select-option">View and edit company information</h3>
         
-        {% if companies %}
-            <div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6; text-align: center; max-width: 900px; margin-left: auto; margin-right: auto;">
-                <h4 style="margin: 0 0 10px 0; color: #495057;">
-                    <i class="fa fa-info-circle"></i> Test Balance Legend:
-                </h4>
-                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
-                    <span style="color: #28a745;"><i class="fa fa-circle"></i> Good (11+)</span>
-                    <span style="color: #ffc107;"><i class="fa fa-circle"></i> Medium (6-10)</span>
-                    <span style="color: #dc3545;"><i class="fa fa-circle"></i> Low (0-5)</span>
+        <!-- Company Summary -->
+        <div class="queue-summary">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fa fa-building"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>{{ total_companies }}</h3>
+                    <p>Total Companies</p>
                 </div>
             </div>
-            
-            <div class="form-container" style="max-width: 900px;">
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <div class="summary-card">
+                <div class="summary-icon active">
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>{{ active_companies }}</h3>
+                    <p>Active Companies</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon inactive">
+                    <i class="fa fa-times-circle"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>{{ inactive_companies }}</h3>
+                    <p>Inactive Companies</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon low-balance">
+                    <i class="fa fa-exclamation-triangle"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>{{ low_balance_companies }}</h3>
+                    <p>Low Balance (≤5)</p>
+                </div>
+            </div>
+        </div>
+        
+        {% if companies %}
+            <!-- Test Balance Legend -->
+            <div class="queue-table-container">
+                <div class="balance-legend">
+                    <h4>
+                        <i class="fa fa-info-circle"></i> Test Balance Legend:
+                    </h4>
+                    <div class="legend-items">
+                        <span class="legend-item good"><i class="fa fa-circle"></i> Good (11+)</span>
+                        <span class="legend-item medium"><i class="fa fa-circle"></i> Medium (6-10)</span>
+                        <span class="legend-item low"><i class="fa fa-circle"></i> Low (0-5)</span>
+                    </div>
+                </div>
+                <table class="table">
                     <thead>
-                        <tr style="background-color: #133c82; color: white;">
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Company Name</th>
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Contact Email</th>
-                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Test Balance</th>
-                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Total Tests</th>
-                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Status</th>
-                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Actions</th>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Contact Email</th>
+                            <th>Test Balance</th>
+                            <th>Total Tests</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for company in companies %}
-                        <tr style="background-color: {% cycle '#f9f9f9' '#ffffff' %}">
-                            <td style="padding: 12px; border: 1px solid #ddd;">
-                                <strong>{{ company.name }}</strong>
-                            </td>
-                            <td style="padding: 12px; border: 1px solid #ddd;">
+                        <tr>
+                            <td><strong>{{ company.name }}</strong></td>
+                            <td>
                                 {% if company.contact_email and company.contact_email != 'placeholder@example.com' %}
                                     {{ company.contact_email }}
                                 {% else %}
-                                    <span style="color: #999;">No email</span>
+                                    <span class="no-email">No email</span>
                                 {% endif %}
                             </td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
-                                <span style="font-weight: bold; color: {% if company.tests_remaining <= 5 %}#dc3545{% elif company.tests_remaining <= 10 %}#ffc107{% else %}#28a745{% endif %};">
+                            <td>
+                                <span class="balance-badge balance-{% if company.tests_remaining <= 5 %}low{% elif company.tests_remaining <= 10 %}medium{% else %}good{% endif %}">
                                     {{ company.tests_remaining }}
                                 </span>
                             </td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">{{ company.total_tests }}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
-                                <span style="font-weight: bold; color: {% if company.is_active %}#28a745{% else %}#dc3545{% endif %};">
-                                    {% if company.is_active %}Active{% else %}Inactive{% endif %}
+                            <td>{{ company.total_tests }}</td>
+                            <td>
+                                <span class="status-badge status-{% if company.is_active %}active{% else %}inactive{% endif %}">
+                                    {% if company.is_active %}
+                                        <i class="fa fa-check-circle"></i> Active
+                                    {% else %}
+                                        <i class="fa fa-times-circle"></i> Inactive
+                                    {% endif %}
                                 </span>
                             </td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
-                                <div style="display: flex; gap: 5px; justify-content: center;">
+                            <td class="actions-cell">
+                                <div class="action-buttons">
                                     <a href="{% url 'edit_company' company.id %}" 
-                                       class="menu-button" 
-                                       style="padding: 6px 12px; font-size: 14px; margin: 2px;">
-                                        <i class="fa fa-edit"></i> Edit
+                                       class="action-btn edit-btn" 
+                                       title="Edit Company">
+                                        <i class="fa fa-edit"></i>
                                     </a>
                                     <a href="{% url 'delete_company' company.id %}" 
-                                       class="menu-button" 
-                                       style="padding: 6px 12px; font-size: 14px; margin: 2px; background-color: #dc3545; border-color: #dc3545; color: white;">
-                                        <i class="fa fa-trash"></i> Delete
+                                       class="action-btn delete-btn" 
+                                       title="Delete Company">
+                                        <i class="fa fa-trash"></i>
                                     </a>
                                 </div>
                             </td>
@@ -76,16 +117,17 @@
                     </tbody>
                 </table>
             {% else %}
-                <div style="text-align: center; padding: 40px; color: #666;">
-                    <i class="fa fa-building" style="font-size: 48px; margin-bottom: 20px;"></i>
-                    <p>No companies have been added yet.</p>
+                <div class="empty-state">
+                    <i class="fa fa-building"></i>
+                    <h3>No companies found</h3>
+                    <p>No companies have been added yet. Add your first company to get started.</p>
                 </div>
             {% endif %}
         </div>
         
         <!-- Pagination -->
         {% if page_obj.has_other_pages %}
-        <div class="button-row" style="margin-top: 20px; margin-bottom: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <div class="queue-navigation">
             {% if page_obj.has_previous %}
                 <a href="?page=1" class="menu-button">
                     <i class="fa fa-angle-double-left"></i> First
@@ -95,7 +137,7 @@
                 </a>
             {% endif %}
             
-            <span style="padding: 8px 12px; background-color: #133c82; color: white; border-radius: 5px; font-weight: bold;">
+            <span class="page-info">
                 Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             </span>
             
@@ -110,7 +152,8 @@
         </div>
         {% endif %}
         
-        <div class="button-row" style="margin-top: 30px; margin-bottom: 50px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <!-- Navigation -->
+        <div class="queue-navigation">
             <a href="{% url 'menu' %}" class="menu-button">
                 <i class="fa fa-arrow-left"></i> Back to Menu
             </a>

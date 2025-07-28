@@ -240,10 +240,22 @@ def modify_companies(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, 'modify_companies.html', {
+    # Calculate counts for summary cards
+    total_companies = Company.objects.count()
+    active_companies = Company.objects.filter(is_active=True).count()
+    inactive_companies = Company.objects.filter(is_active=False).count()
+    low_balance_companies = Company.objects.filter(tests_remaining__lte=5).count()
+    
+    context = {
         'companies': page_obj,
-        'page_obj': page_obj
-    })
+        'page_obj': page_obj,
+        'total_companies': total_companies,
+        'active_companies': active_companies,
+        'inactive_companies': inactive_companies,
+        'low_balance_companies': low_balance_companies,
+    }
+    
+    return render(request, 'modify_companies.html', context)
 
 @login_required
 def edit_company(request, company_id):

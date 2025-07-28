@@ -169,6 +169,18 @@ body {
     color: #28a745;
 }
 
+.summary-icon.active {
+    color: #28a745;
+}
+
+.summary-icon.inactive {
+    color: #dc3545;
+}
+
+.summary-icon.low-balance {
+    color: #ffc107;
+}
+
 .summary-content h3 {
     margin: 0 0 5px 0;
     font-size: 24px;
@@ -449,6 +461,133 @@ body {
 
 .notification-error i {
     color: #dc3545;
+}
+
+/* Balance Legend */
+.balance-legend {
+    margin: 16px auto 12px auto;
+    padding: 10px 18px;
+    background: #e9f5ff;
+    border: 1.5px solid #b3d8f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(19, 60, 130, 0.04);
+    max-width: 420px;
+    font-size: 13px;
+}
+
+.balance-legend h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #1976d2;
+}
+
+.legend-items {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.legend-item {
+    gap: 4px;
+    font-size: 13px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: #fafdff;
+    border: 1px solid #e3eaf3;
+}
+
+.legend-item.good {
+    color: #28a745;
+}
+
+.legend-item.medium {
+    color: #ffc107;
+}
+
+.legend-item.low {
+    color: #dc3545;
+}
+
+/* Balance Badges */
+.balance-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    min-width: 30px;
+}
+
+.balance-badge.balance-good {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.balance-badge.balance-medium {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.balance-badge.balance-low {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Company Status Badges */
+.status-badge.status-active {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Action Buttons for Companies */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.action-btn.edit-btn {
+    background-color: #17a2b8;
+}
+
+.action-btn.edit-btn:hover {
+    background-color: #138496;
+}
+
+.action-btn.delete-btn {
+    background-color: #dc3545;
+}
+
+.action-btn.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* No Email Styling */
+.no-email {
+    color: #999;
+    font-style: italic;
+}
+
+/* Page Info */
+.page-info {
+    padding: 8px 12px;
+    background-color: #133c82;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 /* Responsive Design */

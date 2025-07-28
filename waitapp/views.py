@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse, get_list_or_404, get_object_or_404
-from .forms import TruckDriverForm, MasterReportForm, CompanyForm
+from .forms import TruckDriverForm, MasterReportForm, CompanyForm, CompanyEditForm
 from .models import TruckDriver
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -192,3 +192,50 @@ def add_company(request):
         form = CompanyForm()
 
     return render(request, 'add_company.html', {'form': form})
+
+from django.core.paginator import Paginator
+
+@login_required
+def modify_companies(request):
+    companies_list = Company.objects.all().order_by('name')
+    paginator = Paginator(companies_list, 10)  # Show 10 companies per page
+    
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'modify_companies.html', {
+        'companies': page_obj,
+        'page_obj': page_obj
+    })
+
+@login_required
+def edit_company(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+    
+    if request.method == 'POST':
+        form = CompanyEditForm(request.POST, instance=company)
+        if form.is_valid():
+            form.save()
+            request.session['success_message'] = f"Company '{company.name}' has been successfully updated."
+            return redirect('modify_companies')
+    else:
+        form = CompanyEditForm(instance=company)
+    
+    return render(request, 'edit_company.html', {
+        'form': form,
+        'company': company
+    })
+
+@login_required
+def delete_company(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+    
+    if request.method == 'POST':
+        company_name = company.name
+        company.delete()
+        request.session['success_message'] = f"Company '{company_name}' has been successfully deleted."
+        return redirect('modify_companies')
+    
+    return render(request, 'delete_company.html', {
+        'company': company
+    })

@@ -23,6 +23,7 @@ class Company(models.Model):
     contact_email = models.EmailField(blank=True, null=True)  # ✅ allow blank
     total_tests = models.IntegerField(default=0)
     tests_remaining = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True, help_text="Active companies appear in driver selection")
 
     def __str__(self):
         return self.name

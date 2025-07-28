@@ -31,6 +31,9 @@ urlpatterns = [
     path('update_status/', views.update_status, name='update_status'),
     path('report_list/', views.report_list, name='report_list'),
     path('add_company/', views.add_company, name='add_company'),
+    path('modify_companies/', views.modify_companies, name='modify_companies'),
+    path('edit_company/<int:company_id>/', views.edit_company, name='edit_company'),
+    path('delete_company/<int:company_id>/', views.delete_company, name='delete_company'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

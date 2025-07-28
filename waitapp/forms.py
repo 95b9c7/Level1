@@ -21,7 +21,7 @@ class TruckDriverForm(forms.ModelForm):
     )
     company = forms.ModelChoiceField(
         label='Company',
-        queryset=Company.objects.all().order_by('name'),
+        queryset=Company.objects.filter(is_active=True).order_by('name'),
         widget=forms.Select(attrs={'class': 'form-control'}),
         required=False,
         empty_label='Select a company...'
@@ -52,7 +52,7 @@ class MasterReportForm(forms.Form):
     )
     company = forms.ModelChoiceField(
         label='Company',
-        queryset=Company.objects.all().order_by('name'),
+        queryset=Company.objects.filter(is_active=True).order_by('name'),
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'}),
         empty_label='All Companies'
@@ -63,7 +63,10 @@ class CompanyForm(forms.ModelForm):
         model = Company
         fields = ['name', 'contact_email', 'tests_remaining']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter company name'
+            }),
             'contact_email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter email or leave blank'
@@ -74,3 +77,78 @@ class CompanyForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['tests_remaining'].label = 'Test Balance'
+        self.fields['name'].label = 'Company Name'
+        self.fields['contact_email'].label = 'Contact Email'
+        
+        # Make name required and add validation
+        self.fields['name'].required = True
+        self.fields['tests_remaining'].required = True
+        self.fields['contact_email'].required = False
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if name:
+            # Check if company with this name already exists
+            if Company.objects.filter(name__iexact=name).exists():
+                raise forms.ValidationError("A company with this name already exists.")
+        return name
+    
+    def clean_tests_remaining(self):
+        tests = self.cleaned_data.get('tests_remaining')
+        if tests is not None and tests < 0:
+            raise forms.ValidationError("Test balance cannot be negative.")
+        return tests
+
+class CompanyEditForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'contact_email', 'tests_remaining', 'is_active']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter company name'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter email or leave blank'
+            }),
+            'tests_remaining': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter test balance',
+                'min': '0'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tests_remaining'].label = 'Test Balance'
+        self.fields['name'].label = 'Company Name'
+        self.fields['contact_email'].label = 'Contact Email'
+        self.fields['is_active'].label = 'Active Company'
+        
+        # Make name required and add validation
+        self.fields['name'].required = True
+        self.fields['tests_remaining'].required = True
+        self.fields['contact_email'].required = False
+        self.fields['is_active'].required = False
+    
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if name:
+            # Check if company with this name already exists (excluding current instance)
+            existing_companies = Company.objects.filter(name__iexact=name)
+            if self.instance.pk:
+                existing_companies = existing_companies.exclude(pk=self.instance.pk)
+            
+            if existing_companies.exists():
+                raise forms.ValidationError("A company with this name already exists.")
+        return name
+    
+    def clean_tests_remaining(self):
+        tests = self.cleaned_data.get('tests_remaining')
+        if tests is not None and tests < 0:
+            raise forms.ValidationError("Test balance cannot be negative.")
+        return tests

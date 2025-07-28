@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Companies</title>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
+        </div>
+        <div class="top-bar-right">
+            <a href="{% url 'login' %}" class="sign-out-button">
+                <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+        </div>
+    </div>
+    
+    <div class="center-text">
+        <h1>Modify Companies</h1>
+        <h3 class="select-option">View and edit company information</h3>
+        
+        {% if companies %}
+            <div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6; text-align: center; max-width: 900px; margin-left: auto; margin-right: auto;">
+                <h4 style="margin: 0 0 10px 0; color: #495057;">
+                    <i class="fa fa-info-circle"></i> Test Balance Legend:
+                </h4>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+                    <span style="color: #28a745;"><i class="fa fa-circle"></i> Good (11+)</span>
+                    <span style="color: #ffc107;"><i class="fa fa-circle"></i> Medium (6-10)</span>
+                    <span style="color: #dc3545;"><i class="fa fa-circle"></i> Low (0-5)</span>
+                </div>
+            </div>
+            
+            <div class="form-container" style="max-width: 900px;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background-color: #133c82; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Company Name</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Contact Email</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Test Balance</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Total Tests</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Status</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr style="background-color: {% cycle '#f9f9f9' '#ffffff' %}">
+                            <td style="padding: 12px; border: 1px solid #ddd;">
+                                <strong>{{ company.name }}</strong>
+                            </td>
+                            <td style="padding: 12px; border: 1px solid #ddd;">
+                                {% if company.contact_email and company.contact_email != 'placeholder@example.com' %}
+                                    {{ company.contact_email }}
+                                {% else %}
+                                    <span style="color: #999;">No email</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
+                                <span style="font-weight: bold; color: {% if company.tests_remaining <= 5 %}#dc3545{% elif company.tests_remaining <= 10 %}#ffc107{% else %}#28a745{% endif %};">
+                                    {{ company.tests_remaining }}
+                                </span>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">{{ company.total_tests }}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
+                                <span style="font-weight: bold; color: {% if company.is_active %}#28a745{% else %}#dc3545{% endif %};">
+                                    {% if company.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #ddd;">
+                                <div style="display: flex; gap: 5px; justify-content: center;">
+                                    <a href="{% url 'edit_company' company.id %}" 
+                                       class="menu-button" 
+                                       style="padding: 6px 12px; font-size: 14px; margin: 2px;">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'delete_company' company.id %}" 
+                                       class="menu-button" 
+                                       style="padding: 6px 12px; font-size: 14px; margin: 2px; background-color: #dc3545; border-color: #dc3545; color: white;">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <i class="fa fa-building" style="font-size: 48px; margin-bottom: 20px;"></i>
+                    <p>No companies have been added yet.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="button-row" style="margin-top: 20px; margin-bottom: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="menu-button">
+                    <i class="fa fa-angle-double-left"></i> First
+                </a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="menu-button">
+                    <i class="fa fa-angle-left"></i> Previous
+                </a>
+            {% endif %}
+            
+            <span style="padding: 8px 12px; background-color: #133c82; color: white; border-radius: 5px; font-weight: bold;">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="menu-button">
+                    Next <i class="fa fa-angle-right"></i>
+                </a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="menu-button">
+                    Last <i class="fa fa-angle-double-right"></i>
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="button-row" style="margin-top: 30px; margin-bottom: 50px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <a href="{% url 'menu' %}" class="menu-button">
+                <i class="fa fa-arrow-left"></i> Back to Menu
+            </a>
+            <a href="{% url 'add_company' %}" class="menu-button">
+                <i class="fa fa-plus-circle"></i> Add New Company
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Company</title>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo-container">
+            <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
+        </div>
+        <div class="top-bar-right">
+            <a href="{% url 'login' %}" class="sign-out-button">
+                <i class="fa fa-sign-out"></i> Sign Out
+            </a>
+        </div>
+    </div>
+    
+    <div class="center-text">
+        <h1>Delete Company</h1>
+        <h3 class="select-option">Confirm deletion of company</h3>
+        
+        <div class="form-container" style="max-width: 600px; display: flex; flex-direction: column; align-items: center;">
+            <div style="background-color: #f8d7da; color: #721c24; padding: 20px; border-radius: 10px; border: 1px solid #f5c6cb; margin-bottom: 20px; width: 100%;">
+                <h4 style="margin: 0 0 15px 0;">
+                    <i class="fa fa-exclamation-triangle"></i> Warning: This action cannot be undone!
+                </h4>
+                <p style="margin: 0; line-height: 1.5;">
+                    You are about to permanently delete the company <strong>"{{ company.name }}"</strong>. 
+                    This will remove all associated data and cannot be recovered.
+                </p>
+            </div>
+            
+            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #dee2e6; margin-bottom: 30px; width: 100%;">
+                <h4 style="margin: 0 0 15px 0; color: #495057;">
+                    <i class="fa fa-info-circle"></i> Company Details:
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <strong>Company Name:</strong><br>
+                        {{ company.name }}
+                    </div>
+                    <div>
+                        <strong>Contact Email:</strong><br>
+                        {% if company.contact_email and company.contact_email != 'placeholder@example.com' %}
+                            {{ company.contact_email }}
+                        {% else %}
+                            <span style="color: #999;">No email</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>Test Balance:</strong><br>
+                        {{ company.tests_remaining }}
+                    </div>
+                    <div>
+                        <strong>Total Tests:</strong><br>
+                        {{ company.total_tests }}
+                    </div>
+                    <div>
+                        <strong>Status:</strong><br>
+                        <span style="color: {% if company.is_active %}#28a745{% else %}#dc3545{% endif %}; font-weight: bold;">
+                            {% if company.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post" style="width: 100%;">
+                {% csrf_token %}
+                <div class="button-row" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <a href="{% url 'modify_companies' %}" class="menu-button">
+                        <i class="fa fa-arrow-left"></i> Cancel
+                    </a>
+                    <button type="submit" class="menu-button" style="background-color: #dc3545; border-color: #dc3545; color: white;">
+                        <i class="fa fa-trash"></i> Delete Company
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

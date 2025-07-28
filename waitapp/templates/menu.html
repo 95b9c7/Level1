@@ -1,40 +1,18 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
-</head>
-<body>
-    
-    <div class="top-bar">
-        <!-- Logo container -->
-        <div class="logo-container">
-            <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
-        </div>
-        <div class="top-bar-right">
-            <div class="user-info">
-                Welcome, {{ request.user.first_name }}!
-            </div>
-            <a href="{% url 'login' %}" class="sign-out-button">
-                <i class="fa fa-sign-out"></i> Sign Out
-            </a>
-        </div>
-    </div>
-    <div class="center-text">
-        <h1>Main Menu</h1>
-        <h3 class="select-option">Select an option:</h3>
-        <ul class="button-list">
-            <li><a href="{% url 'manage_queue' %}" class="menu-button">Manage Queue</a></li>
-            <li><a href="{% url 'queue_list' %}" class="menu-button">Queue List</a></li>
-            <li><a href="{% url 'add_company' %}" class="menu-button">Add Company</a></li>
-            <li><a href="{% url 'modify_companies' %}" class="menu-button">Modify Companies</a></li>
-            <li><a href="{% url 'report_list' %}" class="menu-button">Reports</a></li>
-        </ul>
-    </div> 
-    
-</body>
-</html>
+
+{% block title %}Menu{% endblock %}
+
+{% block content %}
+<div class="center-text">
+    <h1>Main Menu</h1>
+    <h3 class="select-option">Select an option:</h3>
+    <ul class="button-list">
+        <li><a href="{% url 'manage_queue' %}" class="menu-button">Manage Queue</a></li>
+        <li><a href="{% url 'queue_list' %}" class="menu-button">Queue List</a></li>
+        <li><a href="{% url 'add_company' %}" class="menu-button">Add Company</a></li>
+        <li><a href="{% url 'modify_companies' %}" class="menu-button">Modify Companies</a></li>
+        <li><a href="{% url 'report_list' %}" class="menu-button">Reports</a></li>
+    </ul>
+</div>
+{% endblock %}

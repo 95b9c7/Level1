@@ -1,0 +1,58 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<div class="greeting">Hello {{ company_name }},</div>
+
+<div class="alert-box warning">
+    <h3>⚠️ IMPORTANT: Low Test Balance Alert</h3>
+    <p>You have <strong>{{ tests_remaining }} drug tests remaining</strong> in your account.</p>
+</div>
+
+<div class="message">
+    To avoid service interruptions and ensure your drivers can continue testing without delays, please contact us to purchase additional tests.
+</div>
+
+<div class="info-box">
+    <h3>📊 Current Account Status</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Company Name:</strong>
+            {{ company_name }}
+        </div>
+        <div class="info-item">
+            <strong>Test Balance:</strong>
+            <span class="status-badge warning">{{ tests_remaining }} tests</span>
+        </div>
+        <div class="info-item">
+            <strong>Status:</strong>
+            <span class="status-badge warning">Low Balance</span>
+        </div>
+        <div class="info-item">
+            <strong>Action Required:</strong>
+            Purchase More Tests
+        </div>
+    </div>
+</div>
+
+<div class="contact-info">
+    <h3>🚀 Purchase Additional Tests</h3>
+    <p>Contact us immediately to avoid any service interruptions:</p>
+    <div class="contact-item">
+        <i>📧</i> Email: service@level1da.com
+    </div>
+    <div class="contact-item">
+        <i>📱</i> Phone: (956) 237-7155
+    </div>
+    <div class="contact-item">
+        <i>⏰</i> Hours: Monday - Friday, 8:00 AM - 5:00 PM
+    </div>
+</div>
+
+<div class="message">
+    <strong>Why act now?</strong><br>
+    • Prevent service interruptions<br>
+    • Maintain compliance requirements<br>
+    • Ensure driver testing continues smoothly<br>
+    • Avoid last-minute rush orders
+</div>
+{% endblock %} 

@@ -12,29 +12,17 @@ from django.core.mail import send_mail
 from .models import Company
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from .email_utils import (
+    send_test_started_email,
+    send_test_completed_email, 
+    send_low_balance_email, 
+    send_zero_balance_email, 
+    send_welcome_email
+)
 
 # Create your views here.
 
-def notify_company(driver):
-    if (
-        driver.company 
-        and driver.company.contact_email
-        and driver.company.contact_email.lower() != "placeholder@example.com"
-        ):
-        subject = f"Drug Test Completed: {driver.name}"
-        message = (
-            f"Hello {driver.company.name},\n\n"
-            f"{driver.name} has completed a drug test on {driver.finished_date} at {driver.finished_time}.\n\n"
-            f"Thank you,\nTrucker Wait List System"
-        )
-
-        send_mail(
-            subject,
-            message,
-            'zrincon@level1da.com',  # You can customize this
-            [driver.company.contact_email],
-            fail_silently=True,
-        )
+# Old email functions removed - now using HTML email system in email_utils.py
 
 def driver_form(request):
     if request.method == 'POST':
@@ -105,6 +93,9 @@ def update_status(request):
             submission.in_progress_date = now.date()
             submission.in_progress_employee = request.user.username
             submission.save()
+            
+            # Send test started notification
+            send_test_started_email(submission)
 
         elif new_status == 'Finished' and original_status != 'Finished':
             submission.status = 'Finished'
@@ -114,25 +105,19 @@ def update_status(request):
             submission.finished_employee = request.user.username
             submission.save()
 
-            notify_company(submission)  # your custom notification logic
+            # Send completion notification
+            send_test_completed_email(submission)
 
+            # Update test balance and send alerts
             if submission.company and submission.company.tests_remaining > 0:
                 submission.company.tests_remaining -= 1
                 submission.company.save()
 
-                if submission.company.tests_remaining <= 5:
-                    send_mail(
-                        subject=f"Low Test Balance Alert for {submission.company.name}",
-                        message=(
-                            f"Hello {submission.company.name},\n\n"
-                            f"You have {submission.company.tests_remaining} drug tests remaining.\n"
-                            f"Please consider purchasing more tests to avoid interruptions.\n\n"
-                            f"— Trucker Wait List System"
-                        ),
-                        from_email='zrincon@level1da.com',
-                        recipient_list=[submission.company.contact_email],
-                        fail_silently=True,
-                    )
+                # Send appropriate balance alerts
+                if submission.company.tests_remaining == 0:
+                    send_zero_balance_email(submission.company)
+                elif submission.company.tests_remaining <= 5:
+                    send_low_balance_email(submission.company)
 
         return JsonResponse({'success': True})
 
@@ -192,6 +177,13 @@ def add_company(request):
             company.total_tests = 0
 
             company.save()
+            
+            # Send welcome email if company has a real email
+            if company.contact_email and company.contact_email.lower() != 'placeholder@example.com':
+                send_welcome_email(company)
+            
+            # Add success message to session
+            request.session['success_message'] = f"Company '{company.name}' has been successfully added with {company.tests_remaining} test balance."
             return redirect('menu')
     else:
         form = CompanyForm()

@@ -1,0 +1,69 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<div class="greeting">Welcome to Level 1 D&A, {{ company_name }}!</div>
+
+<div class="message">
+    Thank you for choosing Level 1 D&A Drug & Alcohol Services! Your account has been successfully created and you're now ready to start managing your driver testing program.
+</div>
+
+<div class="info-box">
+    <h3>🎉 Account Successfully Created</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Company Name:</strong>
+            {{ company_name }}
+        </div>
+        <div class="info-item">
+            <strong>Initial Test Balance:</strong>
+            <span class="status-badge success">{{ tests_remaining }} tests</span>
+        </div>
+        <div class="info-item">
+            <strong>Contact Email:</strong>
+            {{ contact_email }}
+        </div>
+        <div class="info-item">
+            <strong>Account Status:</strong>
+            <span class="status-badge success">Active</span>
+        </div>
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>📋 What You Can Expect</h3>
+    <div class="message">
+        <strong>Automated Notifications:</strong><br>
+        • <strong>Test Started:</strong> You'll receive a notification when a driver begins their test<br>
+        • <strong>Test Completed:</strong> You'll receive a notification when a test is finished<br>
+        • <strong>Balance Alerts:</strong> You'll be notified when your test balance is running low (≤5 tests)<br>
+        • <strong>Account Updates:</strong> Real-time balance updates after each test
+    </div>
+</div>
+
+<div class="contact-info">
+    <h3>📞 Need Help or More Tests?</h3>
+    <p>Our team is here to support you:</p>
+    <div class="contact-item">
+        <i>📧</i> Email: service@level1da.com
+    </div>
+    <div class="contact-item">
+        <i>📱</i> Phone: (956) 237-7155
+    </div>
+    <div class="contact-item">
+        <i>⏰</i> Hours: Monday - Friday, 8:00 AM - 5:00 PM
+    </div>
+</div>
+
+<div class="message">
+    <strong>Getting Started:</strong><br>
+    • Your drivers can now check in for testing<br>
+    • Tests will be automatically tracked and reported<br>
+    • You'll receive real-time notifications for all activities<br>
+    • Contact us anytime for additional tests or support
+</div>
+
+<div class="alert-box">
+    <h3>💡 Pro Tip</h3>
+    <p>Set up a reminder to purchase additional tests when your balance reaches 10 tests to ensure you never run out!</p>
+</div>
+{% endblock %} 

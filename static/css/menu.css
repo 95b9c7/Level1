@@ -43,6 +43,26 @@ body {
     color: #133c82;
 }
 
+/* Main Content with Watermark */
+.main-content {
+    flex: 1;
+    position: relative;
+}
+
+.main-content::before {
+    content: "Innovate Tech Solutions";
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 10px;
+    color: #f0f0f0;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 1;
+    transform: rotate(-15deg);
+    opacity: 0.3;
+}
+
 /* Centered Text Section */
 .center-text {
     text-align: center;
@@ -399,5 +419,30 @@ table td[colspan="5"] {
     .splash-logo {
         max-height: 100px;
     }
+}
+
+/* Footer Watermark Styling */
+.footer-watermark {
+    margin-top: auto;
+    padding: 15px 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    text-align: center;
+}
+
+.powered-by {
+    font-size: 12px;
+    color: #6c757d;
+    opacity: 0.7;
+}
+
+.powered-by p {
+    margin: 0;
+    font-weight: normal;
+}
+
+.powered-by strong {
+    font-weight: 600;
+    color: #495057;
 }
 

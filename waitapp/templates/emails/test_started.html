@@ -1,0 +1,74 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<div class="greeting">Hello {{ company_name }},</div>
+
+<div class="message">
+    <strong>{{ driver_name }}</strong> has started their drug test on {{ test_date }} at {{ test_time }}.
+</div>
+
+<div class="info-box">
+    <h3>📋 Test Details</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Driver Name:</strong>
+            {{ driver_name }}
+        </div>
+        <div class="info-item">
+            <strong>Test Date:</strong>
+            {{ test_date }}
+        </div>
+        <div class="info-item">
+            <strong>Test Time:</strong>
+            {{ test_time }}
+        </div>
+        <div class="info-item">
+            <strong>Administered By:</strong>
+            {{ admin_employee }}
+        </div>
+    </div>
+</div>
+
+<div class="info-box">
+    <h3>📊 Current Account Status</h3>
+    <div class="info-item">
+        <strong>Test Balance:</strong>
+        <span class="status-badge {% if tests_remaining <= 5 %}warning{% else %}success{% endif %}">
+            {{ tests_remaining }} tests remaining
+        </span>
+    </div>
+</div>
+
+<div class="alert-box">
+    <h3>⏳ Test in Progress</h3>
+    <p>The drug test is now underway. You will receive another notification when the test is completed with the results.</p>
+</div>
+
+{% if tests_remaining <= 5 %}
+<div class="alert-box warning">
+    <h3>⚠️ Low Balance Alert</h3>
+    <p>Your test balance is running low. Consider purchasing additional tests to avoid service interruptions.</p>
+</div>
+{% endif %}
+
+<div class="contact-info">
+    <h3>📞 Questions or Need More Tests?</h3>
+    <div class="contact-item">
+        <i>📧</i> Email: service@level1da.com
+    </div>
+    <div class="contact-item">
+        <i>📱</i> Phone: (956) 237-7155
+    </div>
+    <div class="contact-item">
+        <i>⏰</i> Hours: Monday - Friday, 8:00 AM - 5:00 PM
+    </div>
+</div>
+
+<div class="message">
+    <strong>What happens next?</strong><br>
+    • Test will be completed by our certified staff<br>
+    • You'll receive a completion notification<br>
+    • Test balance will be updated automatically<br>
+    • Results will be processed according to standard procedures
+</div>
+{% endblock %} 

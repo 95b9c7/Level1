@@ -1,0 +1,63 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<div class="greeting">Hello {{ company_name }},</div>
+
+<div class="alert-box danger">
+    <h3>🚨 URGENT: No Tests Remaining</h3>
+    <p>Your account has <strong>0 drug tests remaining</strong> and has been temporarily suspended.</p>
+</div>
+
+<div class="message">
+    <strong>IMMEDIATE ACTION REQUIRED:</strong> Please contact us immediately to purchase additional tests and restore your account access.
+</div>
+
+<div class="info-box">
+    <h3>📊 Account Status</h3>
+    <div class="info-grid">
+        <div class="info-item">
+            <strong>Company Name:</strong>
+            {{ company_name }}
+        </div>
+        <div class="info-item">
+            <strong>Test Balance:</strong>
+            <span class="status-badge danger">0 tests</span>
+        </div>
+        <div class="info-item">
+            <strong>Account Status:</strong>
+            <span class="status-badge danger">Suspended</span>
+        </div>
+        <div class="info-item">
+            <strong>Action Required:</strong>
+            <span class="status-badge danger">URGENT</span>
+        </div>
+    </div>
+</div>
+
+<div class="contact-info">
+    <h3>🚀 Restore Account Access</h3>
+    <p><strong>Contact us immediately:</strong></p>
+    <div class="contact-item">
+        <i>📧</i> Email: service@level1da.com
+    </div>
+    <div class="contact-item">
+        <i>📱</i> Phone: (956) 237-7155
+    </div>
+    <div class="contact-item">
+        <i>⏰</i> Hours: Monday - Friday, 8:00 AM - 5:00 PM
+    </div>
+</div>
+
+<div class="message">
+    <strong>What happens next?</strong><br>
+    • Contact us to purchase additional tests<br>
+    • We'll process your order immediately<br>
+    • Your account will be reactivated<br>
+    • Driver testing can resume without interruption
+</div>
+
+<div class="alert-box">
+    <h3>⚠️ Important Notice</h3>
+    <p>Your account is currently suspended and drivers cannot be tested until additional tests are purchased. Please contact us immediately to avoid any compliance issues.</p>
+</div>
+{% endblock %} 

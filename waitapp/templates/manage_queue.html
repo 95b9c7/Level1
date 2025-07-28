@@ -1,26 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Queue</title>
-</head>
-<body>
-    <div class="top-bar">
-        <!-- Logo container -->
-        <div class="logo-container">
-            <img src="{% static 'images/Level1DA.PNG' %}" class="logo">
-        </div>
-        <div class="top-bar-right">
-            <a href="{% url 'login' %}" class="sign-out-button">
-                <i class="fa fa-sign-out"></i> Sign Out
-            </a>
-        </div>
-    </div>
+
+{% block title %}Manage Queue{% endblock %}
+
+{% block content %}
     <div class="center-text" >
         <h1>Manage Queue</h1>
         <table class="table" >
@@ -161,5 +144,4 @@
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 </script>
-</body>
-</html>
+{% endblock %}

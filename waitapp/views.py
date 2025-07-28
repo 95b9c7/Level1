@@ -19,6 +19,8 @@ from .email_utils import (
     send_zero_balance_email, 
     send_welcome_email
 )
+from datetime import date, timedelta
+from django.db.models import Count
 
 # Create your views here.
 
@@ -288,3 +290,94 @@ def delete_company(request, company_id):
     return render(request, 'delete_company.html', {
         'company': company
     })
+
+@login_required
+def dashboard(request):
+    from waitapp.models import TruckDriver, Company
+    from django.utils import timezone
+    today = timezone.localdate()
+    first_of_month = today.replace(day=1)
+
+    # Tests this month
+    tests_this_month = TruckDriver.objects.filter(check_in_date__gte=first_of_month).count()
+
+    # Active companies
+    active_companies = Company.objects.filter(is_active=True).count()
+
+    # Low balance companies
+    low_balance_companies = Company.objects.filter(tests_remaining__lte=5).count()
+
+    # Tests per day (last 14 days)
+    tests_per_day_labels = []
+    tests_per_day_data = []
+    for i in range(13, -1, -1):
+        day = today - timedelta(days=i)
+        count = TruckDriver.objects.filter(check_in_date=day).count()
+        tests_per_day_labels.append(day.strftime('%b %d'))
+        tests_per_day_data.append(count)
+
+    # Top 5 companies by test volume (all time)
+    top_companies_qs = (TruckDriver.objects
+        .values('company__name')
+        .annotate(test_count=Count('id'))
+        .order_by('-test_count')[:5])
+    top_companies_labels = [c['company__name'] or 'No Company' for c in top_companies_qs]
+    top_companies_data = [c['test_count'] for c in top_companies_qs]
+
+    # Status breakdown
+    status_labels = ['Waiting', 'In Progress', 'Finished']
+    status_data = [
+        TruckDriver.objects.filter(status='Waiting').count(),
+        TruckDriver.objects.filter(status='In Progress').count(),
+        TruckDriver.objects.filter(status='Finished').count(),
+    ]
+
+    context = {
+        'tests_this_month': tests_this_month,
+        'active_companies': active_companies,
+        'low_balance_companies': low_balance_companies,
+        'tests_per_day_labels': tests_per_day_labels,
+        'tests_per_day_data': tests_per_day_data,
+        'top_companies_labels': top_companies_labels,
+        'top_companies_data': top_companies_data,
+        'status_labels': status_labels,
+        'status_data': status_data,
+    }
+    # Tests per week (last 8 weeks)
+    tests_per_week_labels = []
+    tests_per_week_data = []
+    for i in range(7, -1, -1):
+        week_start = today - timedelta(days=today.weekday() + i * 7)
+        week_end = week_start + timedelta(days=6)
+        count = TruckDriver.objects.filter(check_in_date__gte=week_start, check_in_date__lte=week_end).count()
+        label = week_start.strftime('%b %d')
+        tests_per_week_labels.append(label)
+        tests_per_week_data.append(count)
+
+    # Tests per month (last 12 months)
+    tests_per_month_labels = []
+    tests_per_month_data = []
+    for i in range(11, -1, -1):
+        month = (today.replace(day=1) - timedelta(days=30*i)).replace(day=1)
+        next_month = (month + timedelta(days=32)).replace(day=1)
+        count = TruckDriver.objects.filter(check_in_date__gte=month, check_in_date__lt=next_month).count()
+        label = month.strftime('%b %Y')
+        tests_per_month_labels.append(label)
+        tests_per_month_data.append(count)
+
+    # Tests by hour of day (0-23)
+    tests_by_hour_labels = [f'{h}:00' for h in range(24)]
+    tests_by_hour_data = []
+    for h in range(24):
+        count = TruckDriver.objects.filter(check_in_time__hour=h).count()
+        tests_by_hour_data.append(count)
+
+    context.update({
+        'tests_per_week_labels': tests_per_week_labels,
+        'tests_per_week_data': tests_per_week_data,
+        'tests_per_month_labels': tests_per_month_labels,
+        'tests_per_month_data': tests_per_month_data,
+        'tests_by_hour_labels': tests_by_hour_labels,
+        'tests_by_hour_data': tests_by_hour_data,
+    })
+    return render(request, 'dashboard.html', context)

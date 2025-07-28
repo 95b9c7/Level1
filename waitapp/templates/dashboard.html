@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="center-text">
+    <h1>Dashboard Analytics</h1>
+
+    <h2 style="margin-top: 32px; margin-bottom: 18px; text-align: left;">General Overview</h2>
+    <div class="dashboard-summary-row" style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin: 32px 0;">
+        <div class="summary-card">
+            <div class="summary-icon"><i class="fa fa-flask"></i></div>
+            <div class="summary-content">
+                <h3>{{ tests_this_month }}</h3>
+                <p>Tests This Month</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon active"><i class="fa fa-check-circle"></i></div>
+            <div class="summary-content">
+                <h3>{{ active_companies }}</h3>
+                <p>Active Companies</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon low-balance"><i class="fa fa-exclamation-triangle"></i></div>
+            <div class="summary-content">
+                <h3>{{ low_balance_companies }}</h3>
+                <p>Low Balance</p>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-charts" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Tests Per Day (Last 14 Days)</h4>
+            <canvas id="testsLineChart" height="180"></canvas>
+        </div>
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Top 5 Companies by Test Volume</h4>
+            <canvas id="topCompaniesBarChart" height="180"></canvas>
+        </div>
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Status Breakdown</h4>
+            <canvas id="statusPieChart" height="180"></canvas>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 48px; margin-bottom: 18px; text-align: left;">Time-Based Trends</h2>
+    <div class="dashboard-charts" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Tests Per Week (Last 8 Weeks)</h4>
+            <canvas id="testsPerWeekChart" height="180"></canvas>
+        </div>
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Tests Per Month (Last 12 Months)</h4>
+            <canvas id="testsPerMonthChart" height="180"></canvas>
+        </div>
+        <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); padding: 24px; min-width: 340px; max-width: 420px; flex: 1;">
+            <h4 style="margin-bottom: 12px;">Tests by Hour of Day</h4>
+            <canvas id="testsByHourChart" height="180"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ tests_per_week_labels|json_script:"tests-per-week-labels" }}
+{{ tests_per_week_data|json_script:"tests-per-week-data" }}
+{{ tests_per_month_labels|json_script:"tests-per-month-labels" }}
+{{ tests_per_month_data|json_script:"tests-per-month-data" }}
+{{ tests_by_hour_labels|json_script:"tests-by-hour-labels" }}
+{{ tests_by_hour_data|json_script:"tests-by-hour-data" }}
+{{ tests_per_day_labels|json_script:"tests-per-day-labels" }}
+{{ tests_per_day_data|json_script:"tests-per-day-data" }}
+{{ top_companies_labels|json_script:"top-companies-labels" }}
+{{ top_companies_data|json_script:"top-companies-data" }}
+{{ status_labels|json_script:"status-labels" }}
+{{ status_data|json_script:"status-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const testsPerWeekLabels = JSON.parse(document.getElementById('tests-per-week-labels').textContent);
+const testsPerWeekData = JSON.parse(document.getElementById('tests-per-week-data').textContent);
+const testsPerMonthLabels = JSON.parse(document.getElementById('tests-per-month-labels').textContent);
+const testsPerMonthData = JSON.parse(document.getElementById('tests-per-month-data').textContent);
+const testsByHourLabels = JSON.parse(document.getElementById('tests-by-hour-labels').textContent);
+const testsByHourData = JSON.parse(document.getElementById('tests-by-hour-data').textContent);
+const testsPerDayLabels = JSON.parse(document.getElementById('tests-per-day-labels').textContent);
+const testsPerDayData = JSON.parse(document.getElementById('tests-per-day-data').textContent);
+const topCompaniesLabels = JSON.parse(document.getElementById('top-companies-labels').textContent);
+const topCompaniesData = JSON.parse(document.getElementById('top-companies-data').textContent);
+const statusLabels = JSON.parse(document.getElementById('status-labels').textContent);
+const statusData = JSON.parse(document.getElementById('status-data').textContent);
+const statusColors = ['#ffc107', '#17a2b8', '#28a745'];
+
+// Add new charts for the new section
+new Chart(document.getElementById('testsPerWeekChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: testsPerWeekLabels,
+        datasets: [{
+            label: 'Tests',
+            data: testsPerWeekData,
+            backgroundColor: '#1976d2',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+new Chart(document.getElementById('testsPerMonthChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: testsPerMonthLabels,
+        datasets: [{
+            label: 'Tests',
+            data: testsPerMonthData,
+            backgroundColor: '#133c82',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+new Chart(document.getElementById('testsByHourChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: testsByHourLabels,
+        datasets: [{
+            label: 'Tests',
+            data: testsByHourData,
+            backgroundColor: '#ffc107',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+// Line Chart
+new Chart(document.getElementById('testsLineChart').getContext('2d'), {
+    type: 'line',
+    data: {
+        labels: testsPerDayLabels,
+        datasets: [{
+            label: 'Tests',
+            data: testsPerDayData,
+            borderColor: '#133c82',
+            backgroundColor: 'rgba(19,60,130,0.08)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#133c82',
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 2 } }
+        }
+    }
+});
+
+// Bar Chart
+new Chart(document.getElementById('topCompaniesBarChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: topCompaniesLabels,
+        datasets: [{
+            label: 'Tests',
+            data: topCompaniesData,
+            backgroundColor: '#1976d2',
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } },
+        indexAxis: 'y',
+        scales: {
+            x: { beginAtZero: true }
+        }
+    }
+});
+
+// Pie Chart
+new Chart(document.getElementById('statusPieChart').getContext('2d'), {
+    type: 'pie',
+    data: {
+        labels: statusLabels,
+        datasets: [{
+            data: statusData,
+            backgroundColor: statusColors,
+        }]
+    },
+    options: {
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+</script>
+{% endblock %} 

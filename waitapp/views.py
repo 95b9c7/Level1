@@ -73,8 +73,22 @@ def menu(request):
 @login_required
 def manage_queue(request):
     submissions = TruckDriver.objects.exclude(status='Finished').order_by('check_in_date', 'check_in_time')
+    
+    # Calculate counts for summary cards
+    total_count = TruckDriver.objects.count()
+    waiting_count = TruckDriver.objects.filter(status='Waiting').count()
+    in_progress_count = TruckDriver.objects.filter(status='In Progress').count()
+    finished_count = TruckDriver.objects.filter(status='Finished').count()
 
-    return render(request, 'manage_queue.html', {'submissions': submissions})
+    context = {
+        'submissions': submissions,
+        'total_count': total_count,
+        'waiting_count': waiting_count,
+        'in_progress_count': in_progress_count,
+        'finished_count': finished_count,
+    }
+
+    return render(request, 'manage_queue.html', context)
 
 @require_POST
 @login_required 
@@ -123,6 +137,32 @@ def update_status(request):
 
     except TruckDriver.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Submission not found'}, status=404)
+
+
+@login_required
+def check_queue_updates(request):
+    """Check for updates in the queue and return the latest update time"""
+    from django.utils import timezone
+    
+    # Get the most recent update time from any driver record
+    latest_driver = TruckDriver.objects.order_by('-finished_date', '-finished_time').first()
+    
+    if latest_driver and latest_driver.finished_date:
+        # Use the finished date/time as the last update indicator
+        last_update = timezone.make_aware(
+            timezone.datetime.combine(latest_driver.finished_date, latest_driver.finished_time or timezone.now().time())
+        )
+    else:
+        # If no finished drivers, use current time
+        last_update = timezone.now()
+    
+    return JsonResponse({
+        'last_update': last_update.isoformat(),
+        'total_drivers': TruckDriver.objects.count(),
+        'waiting_count': TruckDriver.objects.filter(status='Waiting').count(),
+        'in_progress_count': TruckDriver.objects.filter(status='In Progress').count(),
+        'finished_count': TruckDriver.objects.filter(status='Finished').count(),
+    })
 
 
 @login_required

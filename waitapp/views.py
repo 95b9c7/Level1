@@ -42,8 +42,12 @@ def driver_form(request):
         if form.is_valid():
             driver = form.save(commit=False)
             
+            # Convert string choice to boolean for follow-up logic
+            is_follow_up = form.cleaned_data.get('is_follow_up') == 'True'
+            driver.is_follow_up = is_follow_up
+            
             # Handle follow-up logic
-            if driver.is_follow_up:
+            if is_follow_up:
                 # Get or create the FOLLOW-UP company
                 follow_up_company, created = Company.objects.get_or_create(
                     name="FOLLOW-UP",
@@ -154,11 +158,11 @@ def report_list(request):
         ws = wb.active
         ws.title = 'Trucker Wait List Report'
 
-        ws.append(['Name', 'Company', 'Status', 'Check In Time', 
+        ws.append(['Name', 'Phone Number', 'Company', 'Status', 'Check In Time', 
                     'Check In Date', 'In Progress Time', 'In Progress Date', 'In Progress Employee',
                     'Finished Time', 'Finished Date', 'Finished Employee'])
         for driver in drivers:
-            ws.append([driver.name, driver.company.name if driver.company else '', 
+            ws.append([driver.name, driver.phone_number or '', driver.company.name if driver.company else '', 
                         driver.status, driver.check_in_time, driver.check_in_date,  
                         driver.in_progress_time, driver.in_progress_date, driver.in_progress_employee,
                         driver.finished_time, driver.finished_date, driver.finished_employee])

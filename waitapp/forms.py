@@ -61,13 +61,16 @@ class MasterReportForm(forms.Form):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'contact_email', 'total_tests', 'tests_remaining']
+        fields = ['name', 'contact_email', 'tests_remaining']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'contact_email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter email or leave blank'
             }),
-            'total_tests': forms.NumberInput(attrs={'class': 'form-control'}),
             'tests_remaining': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tests_remaining'].label = 'Test Balance'

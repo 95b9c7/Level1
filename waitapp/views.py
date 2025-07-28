@@ -183,6 +183,9 @@ def add_company(request):
             if not company.contact_email:
                 company.contact_email = 'placeholder@example.com'
 
+            # Set default value for total_tests (not shown in form)
+            company.total_tests = 0
+
             company.save()
             return redirect('menu')
     else:

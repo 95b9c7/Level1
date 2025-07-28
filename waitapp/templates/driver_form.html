@@ -56,6 +56,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const followUpCheckbox = document.getElementById('{{ form.is_follow_up.id_for_label }}');
             const companyGroup = document.getElementById('company-group');
+            const phoneInput = document.getElementById('{{ form.phone_number.id_for_label }}');
             
             function toggleCompanyField() {
                 if (followUpCheckbox.checked) {
@@ -63,6 +64,48 @@
                 } else {
                     companyGroup.style.display = 'block';
                 }
+            }
+            
+            // Phone number formatting
+            function formatPhoneNumber(value) {
+                // Remove all non-digit characters
+                const digits = value.replace(/\D/g, '');
+                
+                // Limit to 10 digits
+                const limitedDigits = digits.substring(0, 10);
+                
+                // Apply formatting
+                if (limitedDigits.length >= 6) {
+                    return limitedDigits.replace(/(\d{3})(\d{3})(\d{1,4})/, '$1-$2-$3');
+                } else if (limitedDigits.length >= 3) {
+                    return limitedDigits.replace(/(\d{3})(\d{1,3})/, '$1-$2');
+                } else {
+                    return limitedDigits;
+                }
+            }
+            
+            // Phone input event listeners
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    const formattedValue = formatPhoneNumber(e.target.value);
+                    e.target.value = formattedValue;
+                });
+                
+                phoneInput.addEventListener('keydown', function(e) {
+                    // Allow backspace, delete, tab, escape, enter
+                    if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+                        // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                        (e.keyCode === 65 && e.ctrlKey === true) ||
+                        (e.keyCode === 67 && e.ctrlKey === true) ||
+                        (e.keyCode === 86 && e.ctrlKey === true) ||
+                        (e.keyCode === 88 && e.ctrlKey === true)) {
+                        return;
+                    }
+                    // Ensure that it is a number and stop the keypress
+                    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                    }
+                });
             }
             
             // Initial state

@@ -36,13 +36,13 @@
                 <label for="{{ form.name.id_for_label}}" class="form-label">Phone Number</label>
                 {{ form.phone_number }}
             </div>
-           <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-                <label for="{{ form.is_follow_up.id_for_label }}" class="form-label" style="margin: 0;">
-                    Follow Up?
+           <div class="form-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
+                <label for="{{ form.is_follow_up.id_for_label }}" class="form-label" style="margin: 0; white-space: nowrap;">
+                    Are you a Follow Up Driver?
                 </label>
                 {{ form.is_follow_up }}
             </div>
-            <div class="form-group">
+            <div class="form-group" id="company-group">
                 <label for="{{ form.company.id_for_label }}" class="form-label">Company</label>
                 {{ form.company }}
             </div>
@@ -51,5 +51,26 @@
             <button type="submit" class="menu-button">Submit</button>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const followUpCheckbox = document.getElementById('{{ form.is_follow_up.id_for_label }}');
+            const companyGroup = document.getElementById('company-group');
+            
+            function toggleCompanyField() {
+                if (followUpCheckbox.checked) {
+                    companyGroup.style.display = 'none';
+                } else {
+                    companyGroup.style.display = 'block';
+                }
+            }
+            
+            // Initial state
+            toggleCompanyField();
+            
+            // Listen for changes
+            followUpCheckbox.addEventListener('change', toggleCompanyField);
+        });
+    </script>
 </body>
 </html>

@@ -41,6 +41,20 @@ def driver_form(request):
         form = TruckDriverForm(request.POST)
         if form.is_valid():
             driver = form.save(commit=False)
+            
+            # Handle follow-up logic
+            if driver.is_follow_up:
+                # Get or create the FOLLOW-UP company
+                follow_up_company, created = Company.objects.get_or_create(
+                    name="FOLLOW-UP",
+                    defaults={
+                        'contact_email': '',
+                        'total_tests': 0,
+                        'tests_remaining': 0
+                    }
+                )
+                driver.company = follow_up_company
+            
             now = timezone.localtime()
             driver.check_in_time = now.time()
             driver.check_in_date = now.date()

@@ -23,7 +23,7 @@ class TruckDriverForm(forms.ModelForm):
         label='Company',
         queryset=Company.objects.all().order_by('name'),
         widget=forms.Select(attrs={'class': 'form-control'}),
-        required=True,
+        required=False,
         empty_label='Select a company...'
     )
     phone_number = forms.CharField(

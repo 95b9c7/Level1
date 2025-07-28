@@ -31,8 +31,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://level1-production.up.railway.app",  # Be sure to replace with actual domain
 ]
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
-    #'default': env.db(),
+    #'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': env.db(),
 }
 
 # Application definition

@@ -42,8 +42,8 @@ def driver_form(request):
         if form.is_valid():
             driver = form.save(commit=False)
             
-            # Convert string choice to boolean for follow-up logic
-            is_follow_up = form.cleaned_data.get('is_follow_up') == 'True'
+            # Get the follow-up value (BooleanField returns True/False, not string)
+            is_follow_up = form.cleaned_data.get('is_follow_up', False)
             driver.is_follow_up = is_follow_up
             
             # Handle follow-up logic
@@ -54,7 +54,8 @@ def driver_form(request):
                     defaults={
                         'contact_email': '',
                         'total_tests': 0,
-                        'tests_remaining': 0
+                        'tests_remaining': 0,
+                        'is_active': True
                     }
                 )
                 driver.company = follow_up_company

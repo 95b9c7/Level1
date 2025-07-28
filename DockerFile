@@ -23,5 +23,9 @@ RUN python manage.py collectstatic --noinput
 # Expose the port the app runs on
 EXPOSE 8000
 
+# Create a startup script
+RUN echo '#!/bin/bash\npython manage.py migrate\npython manage.py collectstatic --noinput\nexec gunicorn --bind 0.0.0.0:8000 TruckerWaitList.wsgi:application' > /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "TruckerWaitList.wsgi:application"]
+CMD ["/app/start.sh"]

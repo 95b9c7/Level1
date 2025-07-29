@@ -13,7 +13,7 @@ STATUS_CHOICES = [
 class TruckDriverForm(forms.ModelForm):
     class Meta:
         model = TruckDriver
-        fields = ['name', 'company', 'phone_number', 'is_follow_up']
+        fields = ['name', 'company', 'phone_number', 'is_follow_up', 'is_walk_in']
     
     name = forms.CharField(
         label='Driver Name', 
@@ -59,6 +59,15 @@ class TruckDriverForm(forms.ModelForm):
         })
     )
 
+    is_walk_in = forms.BooleanField(
+        label='Walk-in?',
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+            'id': 'walk-in-checkbox'
+        })
+    )
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if name:
@@ -87,11 +96,31 @@ class TruckDriverForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         is_follow_up = cleaned_data.get('is_follow_up')
+        is_walk_in = cleaned_data.get('is_walk_in')
         company = cleaned_data.get('company')
         
         # If it's a follow-up, company is not required
-        if not is_follow_up and not company:
-            raise forms.ValidationError("Please select a company or check the follow-up option.")
+        if is_follow_up:
+            cleaned_data['company'] = None
+            # Clear any validation errors for company field
+            if 'company' in self.errors:
+                del self.errors['company']
+        
+        # If it's a walk-in, ensure WALK-IN company is selected
+        if is_walk_in:
+            # Try to find WALK-IN company
+            try:
+                walk_in_company = Company.objects.get(name="WALK-IN", is_active=True)
+                cleaned_data['company'] = walk_in_company
+                # Clear any validation errors for company field
+                if 'company' in self.errors:
+                    del self.errors['company']
+            except Company.DoesNotExist:
+                raise forms.ValidationError("WALK-IN company not found. Please contact administrator.")
+        
+        # If it's neither follow-up nor walk-in, company is required
+        if not is_follow_up and not is_walk_in and not company:
+            raise forms.ValidationError("Please select a company, check the follow-up option, or check the walk-in option.")
         
         return cleaned_data
 

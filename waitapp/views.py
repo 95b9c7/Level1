@@ -34,29 +34,17 @@ def driver_form(request):
             try:
                 driver = form.save(commit=False)
                 
-                # Get the follow-up value
+                # Get the follow-up and walk-in values
                 is_follow_up = form.cleaned_data.get('is_follow_up', False)
+                is_walk_in = form.cleaned_data.get('is_walk_in', False)
                 driver.is_follow_up = is_follow_up
+                driver.is_walk_in = is_walk_in
                 
-                # Handle follow-up logic
-                if is_follow_up:
-                    # Get or create the FOLLOW-UP company
-                    follow_up_company, created = Company.objects.get_or_create(
-                        name="FOLLOW-UP",
-                        defaults={
-                            'contact_email': '',
-                            'total_tests': 0,
-                            'tests_remaining': 0,
-                            'is_active': True
-                        }
-                    )
-                    driver.company = follow_up_company
-                else:
-                    # Check if selected company has available tests
-                    company = form.cleaned_data.get('company')
-                    if company and company.tests_remaining <= 0:
-                        form.add_error('company', f"Sorry, {company.name} has no tests remaining. Please contact your company administrator.")
-                        return render(request, 'driver_form.html', {'form': form})
+                # Handle special cases (FOLLOW-UP and WALK-IN) - no test removal
+                if is_follow_up or is_walk_in:
+                    # These are organizational tools, not real companies that need test tracking
+                    pass
+                # Note: Removed test balance check - drivers can check in regardless of company test balance
                 
                 # Set check-in time and date
                 now = timezone.localtime()
@@ -67,8 +55,8 @@ def driver_form(request):
                 # Save the driver
                 driver.save()
                 
-                # Send welcome email if company has email
-                if driver.company and driver.company.contact_email:
+                # Send welcome email if company has email (only for real companies)
+                if driver.company and driver.company.contact_email and not is_follow_up and not is_walk_in:
                     try:
                         send_welcome_email(driver.company, driver)
                     except Exception as e:
@@ -160,8 +148,12 @@ def update_status(request):
             # Send completion notification
             send_test_completed_email(submission)
 
-            # Update test balance and send alerts
-            if submission.company and submission.company.tests_remaining > 0:
+            # Update test balance and send alerts (skip for WALK-IN and FOLLOW-UP)
+            if (submission.company and 
+                submission.company.tests_remaining > 0 and 
+                not submission.is_walk_in and 
+                not submission.is_follow_up):
+                
                 submission.company.tests_remaining -= 1
                 submission.company.save()
 

@@ -101,6 +101,20 @@
                 {% endif %}
             </div>
             
+            <div class="form-group walk-in-group">
+                <label for="{{ form.is_walk_in.id_for_label }}" class="checkbox-label" id="walkin-label">
+                    Are you a Walk-in Driver?
+                    <input type="checkbox" name="is_walk_in" id="{{ form.is_walk_in.id_for_label }}" class="form-check-input">
+                </label>
+                {% if form.is_walk_in.errors %}
+                    <div class="field-error">
+                        {% for error in form.is_walk_in.errors %}
+                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
             <div class="form-group" id="company-group">
                 <label for="{{ form.company.id_for_label }}" class="form-label">
                     <span id="company-label">Company</span> <span class="required" id="company-required">*</span>
@@ -135,6 +149,7 @@
                 phoneLabel: "Phone Number",
                 phoneHelp: "Format: (555) 123-4567",
                 followupLabel: "Are you a Follow Up Driver?",
+                walkinLabel: "Are you a Walk-in Driver?",
                 companyLabel: "Company",
                 companyHelp: "Select your company from the list",
                 submitText: "Submit",
@@ -150,6 +165,7 @@
                 phoneLabel: "Número de Teléfono",
                 phoneHelp: "Formato: (555) 123-4567",
                 followupLabel: "¿Eres un conductor de seguimiento?",
+                walkinLabel: "¿Eres un conductor de caminata?",
                 companyLabel: "Empresa",
                 companyHelp: "Seleccione su empresa de la lista",
                 submitText: "Enviar",
@@ -185,6 +201,14 @@
                 followupLabel.appendChild(checkbox);
             }
             
+            // Update walk-in label - preserve the checkbox
+            const walkinLabel = document.getElementById('walkin-label');
+            const walkinCheckbox = walkinLabel.querySelector('.form-check-input');
+            walkinLabel.innerHTML = lang.walkinLabel;
+            if (walkinCheckbox) {
+                walkinLabel.appendChild(walkinCheckbox);
+            }
+            
             document.getElementById('company-label').textContent = lang.companyLabel;
             document.getElementById('company-help').textContent = lang.companyHelp;
             document.getElementById('submit-text').textContent = lang.submitText;
@@ -193,6 +217,9 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const followUpCheckbox = document.getElementById('{{ form.is_follow_up.id_for_label }}');
+            const walkInCheckbox = document.getElementById('{{ form.is_walk_in.id_for_label }}');
+            const followUpGroup = document.querySelector('.follow-up-group');
+            const walkInGroup = document.querySelector('.walk-in-group');
             const companyGroup = document.getElementById('company-group');
             const phoneInput = document.getElementById('{{ form.phone_number.id_for_label }}');
             const nameInput = document.getElementById('{{ form.name.id_for_label }}');
@@ -200,12 +227,61 @@
             const form = document.getElementById('driver-form');
             
             function toggleCompanyField() {
-                if (followUpCheckbox.checked) {
+                if (followUpCheckbox.checked || walkInCheckbox.checked) {
                     companyGroup.style.display = 'none';
                     document.getElementById('company-required').style.display = 'none';
                 } else {
                     companyGroup.style.display = 'block';
                     document.getElementById('company-required').style.display = 'inline';
+                }
+            }
+            
+            function handleCheckboxChange(changedCheckbox) {
+                const companySelect = document.getElementById('{{ form.company.id_for_label }}');
+                
+                console.log('Checkbox changed:', changedCheckbox.id);
+                console.log('Follow-up checked:', followUpCheckbox.checked);
+                console.log('Walk-in checked:', walkInCheckbox.checked);
+                console.log('Follow-up group found:', followUpGroup);
+                console.log('Walk-in group found:', walkInGroup);
+                
+                if (changedCheckbox === followUpCheckbox && followUpCheckbox.checked) {
+                    // Follow-up checked: hide walk-in and company
+                    if (walkInGroup) walkInGroup.style.display = 'none';
+                    if (companyGroup) companyGroup.style.display = 'none';
+                    const companyRequired = document.getElementById('company-required');
+                    if (companyRequired) companyRequired.style.display = 'none';
+                    // Clear company selection for follow-up
+                    if (companySelect) companySelect.value = '';
+                } else if (changedCheckbox === walkInCheckbox && walkInCheckbox.checked) {
+                    // Walk-in checked: hide follow-up and company, set WALK-IN as company
+                    if (followUpGroup) followUpGroup.style.display = 'none';
+                    if (companyGroup) companyGroup.style.display = 'none';
+                    const companyRequired = document.getElementById('company-required');
+                    if (companyRequired) companyRequired.style.display = 'none';
+                    // Set WALK-IN as the company
+                    setWalkInCompany();
+                } else {
+                    // Nothing checked: show all options
+                    if (followUpGroup) followUpGroup.style.display = 'block';
+                    if (walkInGroup) walkInGroup.style.display = 'block';
+                    if (companyGroup) companyGroup.style.display = 'block';
+                    const companyRequired = document.getElementById('company-required');
+                    if (companyRequired) companyRequired.style.display = 'inline';
+                    // Clear company selection
+                    if (companySelect) companySelect.value = '';
+                }
+            }
+            
+            function setWalkInCompany() {
+                const companySelect = document.getElementById('{{ form.company.id_for_label }}');
+                
+                // Find the WALK-IN option in the dropdown
+                for (let i = 0; i < companySelect.options.length; i++) {
+                    if (companySelect.options[i].text === 'WALK-IN') {
+                        companySelect.value = companySelect.options[i].value;
+                        break;
+                    }
                 }
             }
             
@@ -275,8 +351,8 @@
                     clearFieldError(phoneInput);
                 }
                 
-                // Validate company (if not follow-up)
-                if (!followUpCheckbox.checked) {
+                // Validate company (if not follow-up or walk-in)
+                if (!followUpCheckbox.checked && !walkInCheckbox.checked) {
                     const companySelect = document.getElementById('{{ form.company.id_for_label }}');
                     if (!companySelect.value) {
                         showFieldError(companySelect, currentLang === 'en' ? 'Please select a company' : 'Por favor seleccione una empresa');
@@ -319,11 +395,19 @@
                 submitBtn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${loadingText}`;
             });
             
-            // Initial state
-            toggleCompanyField();
+            // Initial state - show all options
+            followUpGroup.style.display = 'block';
+            walkInGroup.style.display = 'block';
+            companyGroup.style.display = 'block';
+            document.getElementById('company-required').style.display = 'inline';
             
             // Listen for changes
-            followUpCheckbox.addEventListener('change', toggleCompanyField);
+            followUpCheckbox.addEventListener('change', function() {
+                handleCheckboxChange(followUpCheckbox);
+            });
+            walkInCheckbox.addEventListener('change', function() {
+                handleCheckboxChange(walkInCheckbox);
+            });
         });
     </script>
     </div>

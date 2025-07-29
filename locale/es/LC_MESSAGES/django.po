@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-28 21:02-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+#: .\waitapp\templates\driver_form.html:22
+msgid "Welcome!"
+msgstr "¡Bienvenido!"
+
+#: .\waitapp\templates\driver_form.html:26
+msgid "Driver Check-In"
+msgstr "Registro de chofer"
+
+#: .\waitapp\templates\driver_form.html:27
+msgid "Please fill out the form below to check-in"
+msgstr "Favor de intreducir informaccion para documentar su llegada"
+
+#: .\waitapp\templates\driver_form.html:34
+msgid "Driver Name"
+msgstr "Nombre del chofer"
+
+#: .\waitapp\templates\driver_form.html:38
+msgid "Phone Number"
+msgstr "Número de Teléfono"
+
+#: .\waitapp\templates\driver_form.html:43
+msgid "Are you a Follow Up Driver?"
+msgstr "¿Es usted un chofer de seguimiento"
+
+#: .\waitapp\templates\driver_form.html:48
+msgid "Company"
+msgstr "Compañía"
+
+#: .\waitapp\templates\driver_form.html:53
+msgid "Submit"
+msgstr "Enviar"
+
+#: .\waitapp\templates\driver_form.html:125
+msgid "Powered by"
+msgstr "Desarrollado por"

@@ -56,7 +56,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     
+]
+
+LANGUGAE_CODE = 'en-us'
+
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('es-mx', 'Spanish'),
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
 ]
 
 ROOT_URLCONF = 'TruckerWaitList.urls'

@@ -255,3 +255,112 @@ body {
     }
 }
 
+@media (max-width: 600px) {
+  body, html {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .center-text, .queue-summary, .queue-table-container, .form-container, .menu-options, .queue-navigation {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .summary-card, .action-buttons, .legend-items {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .table, table {
+    font-size: 14px;
+    width: 100vw;
+    overflow-x: auto;
+    display: block;
+  }
+  th, td {
+    padding: 6px 4px;
+    word-break: break-word;
+  }
+  ul.button-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    list-style: none;
+    box-sizing: border-box;
+  }
+  ul.button-list li {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  ul.button-list .menu-button,
+  .menu-button, .menu-input, .search-bar input[type="text"] {
+    width: 100%;
+    min-width: 0;
+    font-size: 1.1em;
+    padding: 12px 0;
+    margin: 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+    display: block;
+  }
+  .search-bar {
+    padding: 0;
+  }
+  img, .logo, .splash-logo {
+    max-width: 100%;
+    height: auto;
+  }
+  .menu-options, .queue-navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100vw;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .menu-options a, .queue-navigation a, .menu-button {
+    width: 100vw;
+    box-sizing: border-box;
+    margin: 0 0 10px 0;
+    text-align: center;
+    border-radius: 0;
+  }
+  ul.button-list {
+    padding: 0;
+    margin: 0 auto 0 auto;
+    width: 100vw;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  ul.button-list li {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+  }
+  ul.button-list .menu-button {
+    width: 100vw;
+    min-width: 0;
+    font-size: 1.1em;
+    padding: 12px 0;
+    margin: 0 0 10px 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+

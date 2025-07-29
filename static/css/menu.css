@@ -1620,3 +1620,35 @@ input[type="checkbox"].form-check-input {
     }
 }
 
+@media (max-width: 600px) {
+  ul.button-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    list-style: none;
+    box-sizing: border-box;
+  }
+  ul.button-list li {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  ul.button-list .menu-button {
+    width: 100%;
+    min-width: 0;
+    font-size: 1.1em;
+    padding: 12px 0;
+    margin: 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
+    display: block;
+  }
+}
+

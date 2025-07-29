@@ -30,35 +30,69 @@ def driver_form(request):
     if request.method == 'POST':
         form = TruckDriverForm(request.POST)
         if form.is_valid():
-            driver = form.save(commit=False)
-            
-            # Get the follow-up value (BooleanField returns True/False, not string)
-            is_follow_up = form.cleaned_data.get('is_follow_up', False)
-            driver.is_follow_up = is_follow_up
-            
-            # Handle follow-up logic
-            if is_follow_up:
-                # Get or create the FOLLOW-UP company
-                follow_up_company, created = Company.objects.get_or_create(
-                    name="FOLLOW-UP",
-                    defaults={
-                        'contact_email': '',
-                        'total_tests': 0,
-                        'tests_remaining': 0,
-                        'is_active': True
-                    }
-                )
-                driver.company = follow_up_company
-            
-            now = timezone.localtime()
-            driver.check_in_time = now.time()
-            driver.check_in_date = now.date()
-            driver.save()
-            return render(request, 'success.html')
+            try:
+                driver = form.save(commit=False)
+                
+                # Get the follow-up value
+                is_follow_up = form.cleaned_data.get('is_follow_up', False)
+                driver.is_follow_up = is_follow_up
+                
+                # Handle follow-up logic
+                if is_follow_up:
+                    # Get or create the FOLLOW-UP company
+                    follow_up_company, created = Company.objects.get_or_create(
+                        name="FOLLOW-UP",
+                        defaults={
+                            'contact_email': '',
+                            'total_tests': 0,
+                            'tests_remaining': 0,
+                            'is_active': True
+                        }
+                    )
+                    driver.company = follow_up_company
+                else:
+                    # Check if selected company has available tests
+                    company = form.cleaned_data.get('company')
+                    if company and company.tests_remaining <= 0:
+                        form.add_error('company', f"Sorry, {company.name} has no tests remaining. Please contact your company administrator.")
+                        return render(request, 'driver_form.html', {'form': form})
+                
+                # Set check-in time and date
+                now = timezone.localtime()
+                driver.check_in_time = now.time()
+                driver.check_in_date = now.date()
+                driver.status = 'Waiting'
+                
+                # Save the driver
+                driver.save()
+                
+                # Send welcome email if company has email
+                if driver.company and driver.company.contact_email:
+                    try:
+                        send_welcome_email(driver.company, driver)
+                    except Exception as e:
+                        # Log the error but don't fail the form submission
+                        print(f"Failed to send welcome email: {e}")
+                
+                return render(request, 'success.html')
+                
+            except Exception as e:
+                # Handle any unexpected errors
+                form.add_error(None, f"An error occurred while processing your submission. Please try again. Error: {str(e)}")
+                return render(request, 'driver_form.html', {'form': form})
     else:
         form = TruckDriverForm()
 
-    return render(request, 'driver_form.html', {'form': form})
+    # Get some context for the template
+    context = {
+        'form': form,
+        'total_drivers_today': TruckDriver.objects.filter(
+            check_in_date=timezone.localtime().date()
+        ).count(),
+        'active_companies': Company.objects.filter(is_active=True).count(),
+    }
+
+    return render(request, 'driver_form.html', context)
 
 def success(request):
     return render(request, 'success.html')

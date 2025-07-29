@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Success</title>
 </head>
 <body>
@@ -14,24 +14,69 @@
         <div class="logo-container">
             <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="logo">
         </div>
+        <div class="language-toggle">
+            <button id="language-btn" class="lang-btn" onclick="toggleLanguage()">
+                <i class="fa fa-globe"></i>
+                <span id="lang-text">Español</span>
+            </button>
+        </div>
     </div>
+    
     <div class="splash-screen">
         <div class="splash-content">
             <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="splash-logo">
-            <h1>Welcome!</h1>
+            <h1 id="welcome-text">Welcome!</h1>
         </div>
     </div>
+    
     <div class="center-text">
-        <h1> Thank you for checking in!</h1>
-        <h3 class="select-option">Feel free to view queue or like us on Facebook!</h3>
-        <a href="{% url 'queue_list' %}" class="menu-button" ><i class="fa fa-group"></i> View Queue</a>
+        <h1 id="success-title">Thank you for checking in!</h1>
+        <h3 class="select-option" id="success-subtitle">Feel free to view queue or like us on Facebook!</h3>
+        <a href="{% url 'queue_list' %}" class="menu-button">
+            <i class="fa fa-list"></i> <span id="view-queue-text">View Queue</span>
+        </a>
         <h3 class="select-option"> </h3>
         
-        
-    <script src="https://static.elfsight.com/platform/platform.js" async></script>
-    <div class="elfsight-app-53fa6fc2-d129-4566-b12d-1593aaf09912" data-elfsight-app-lazy></div>
+        <script src="https://static.elfsight.com/platform/platform.js" async></script>
+        <div class="elfsight-app-53fa6fc2-d129-4566-b12d-1593aaf09912" data-elfsight-app-lazy></div>
+    </div>
 
-    
-</div>
+    <script>
+        // Language translations for success page
+        const translations = {
+            en: {
+                welcome: "Welcome!",
+                successTitle: "Thank you for checking in!",
+                successSubtitle: "Feel free to view queue or like us on Facebook!",
+                viewQueueText: "View Queue",
+                langText: "Español"
+            },
+            es: {
+                welcome: "¡Bienvenido!",
+                successTitle: "¡Gracias por registrarse!",
+                successSubtitle: "¡Siéntase libre de ver la fila o darnos like en Facebook!",
+                viewQueueText: "Ver Fila",
+                langText: "English"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const lang = translations[currentLang];
+            
+            // Update all text elements
+            document.getElementById('welcome-text').textContent = lang.welcome;
+            document.getElementById('success-title').textContent = lang.successTitle;
+            document.getElementById('success-subtitle').textContent = lang.successSubtitle;
+            document.getElementById('view-queue-text').textContent = lang.viewQueueText;
+            document.getElementById('lang-text').textContent = lang.langText;
+        }
+    </script>
 </body>
 </html>

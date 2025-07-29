@@ -857,3 +857,766 @@ table td[colspan="5"] {
     color: #495057;
 }
 
+/* Stats Display */
+.stats-display {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    color: #666;
+}
+
+.stat-item i {
+    color: #133c82;
+    font-size: 16px;
+}
+
+/* Form Enhancements */
+.required {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.help-text {
+    color: #666;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+.error-message p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.field-error p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.field-error i {
+    font-size: 10px;
+}
+
+/* Checkbox Styling */
+.follow-up-group {
+    margin-bottom: 25px;
+}
+
+.checkbox-label {
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin: 0 !important;
+    margin-left: -24px !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+/* Override any default input styling */
+input[type="checkbox"].form-check-input {
+    margin: 0 !important;
+    margin-left: -24px !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Form Field Error States */
+.sleek-form input.error,
+.sleek-form select.error {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+}
+
+/* Loading State */
+.menu-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Responsive Design for Stats */
+@media (max-width: 768px) {
+    .stats-display {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+/* Success Page Styles */
+.success-container {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 80px;
+    color: #28a745;
+    margin-bottom: 20px;
+    animation: bounce 1s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.success-info {
+    margin: 30px 0;
+    text-align: left;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #133c82;
+}
+
+.info-item i {
+    color: #133c82;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.info-item span {
+    color: #333;
+    font-weight: 500;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.menu-button.secondary {
+    background: #6c757d;
+    color: white;
+    border: 2px solid #6c757d;
+}
+
+.menu-button.secondary:hover {
+    background: #5a6268;
+    border-color: #5a6268;
+}
+
+.social-section {
+    margin-top: 40px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design for Success Page */
+@media (max-width: 768px) {
+    .success-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-buttons .menu-button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .info-item {
+        font-size: 14px;
+    }
+}
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+    /* General mobile adjustments */
+    .center-text h1 {
+        font-size: 24px;
+        margin-bottom: 8px;
+    }
+    
+    .center-text .select-option {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    
+    /* Form container mobile adjustments */
+    .form-container {
+        padding: 10px;
+    }
+    
+    .sleek-form {
+        padding: 20px 15px;
+        max-width: 100%;
+        margin: 0 10px;
+    }
+    
+    /* Form group mobile adjustments */
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-label {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    .sleek-form input,
+    .sleek-form select {
+        padding: 10px 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Stats display mobile */
+    .stats-display {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .stat-item {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    /* Checkbox mobile adjustments */
+    .checkbox-wrapper {
+        gap: 8px;
+    }
+    
+    .checkbox-label {
+        font-size: 14px;
+    }
+    
+    .form-check-input {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* Error messages mobile */
+    .error-message {
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .field-error {
+        font-size: 11px;
+    }
+    
+    .help-text {
+        font-size: 11px;
+    }
+    
+    /* Success page mobile adjustments */
+    .success-container {
+        padding: 20px 15px;
+        margin: 10px;
+        border-radius: 10px;
+    }
+    
+    .success-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .success-container h1 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+    
+    .success-container .select-option {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .success-info {
+        margin: 20px 0;
+    }
+    
+    .info-item {
+        margin: 10px 0;
+        padding: 8px;
+        font-size: 13px;
+        gap: 10px;
+    }
+    
+    .info-item i {
+        font-size: 16px;
+        width: 16px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .action-buttons .menu-button {
+        width: 100%;
+        max-width: 280px;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .social-section {
+        margin: 20px 10px;
+        padding: 15px;
+    }
+    
+    /* Top bar mobile adjustments */
+    .top-bar {
+        padding: 8px 15px;
+        height: 50px;
+    }
+    
+    .logo-container img.logo {
+        height: 40px;
+    }
+    
+    /* Splash screen mobile */
+    .splash-logo {
+        max-height: 80px;
+    }
+    
+    .splash-content h1 {
+        font-size: 20px;
+    }
+    
+    /* Footer mobile */
+    .footer-watermark {
+        padding: 10px 0;
+    }
+    
+    .powered-by {
+        font-size: 11px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .sleek-form {
+        padding: 15px 10px;
+        margin: 0 5px;
+    }
+    
+    .center-text h1 {
+        font-size: 20px;
+    }
+    
+    .center-text .select-option {
+        font-size: 14px;
+    }
+    
+    .stat-item {
+        max-width: 250px;
+        font-size: 12px;
+    }
+    
+    .success-container {
+        padding: 15px 10px;
+        margin: 5px;
+    }
+    
+    .success-icon {
+        font-size: 50px;
+    }
+    
+    .success-container h1 {
+        font-size: 18px;
+    }
+    
+    .info-item {
+        font-size: 12px;
+    }
+    
+    .action-buttons .menu-button {
+        max-width: 250px;
+        font-size: 13px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .splash-screen {
+        display: none; /* Hide splash on landscape mobile */
+    }
+    
+    .form-container {
+        padding: 5px;
+    }
+    
+    .sleek-form {
+        padding: 15px;
+    }
+    
+    .success-container {
+        padding: 15px;
+    }
+}
+
+/* Manage Queue Mobile Responsiveness */
+@media (max-width: 768px) {
+    /* Queue summary mobile */
+    .queue-summary {
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .summary-card {
+        min-width: 80px;
+        padding: 12px 8px;
+    }
+    
+    .summary-content h3 {
+        font-size: 20px;
+    }
+    
+    .summary-content p {
+        font-size: 12px;
+    }
+    
+    /* Filter controls mobile */
+    .filter-controls {
+        margin: 15px auto;
+        padding: 15px;
+        max-width: 95%;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .filter-group select,
+    .search-input {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .filter-btn, 
+    .clear-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    /* Balance legend mobile */
+    .balance-legend {
+        margin: 12px auto 8px auto;
+        padding: 8px 12px;
+        max-width: 95%;
+        font-size: 12px;
+    }
+    
+    .balance-legend h4 {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .legend-items {
+        gap: 8px;
+    }
+    
+    .legend-item {
+        font-size: 11px;
+        padding: 1px 6px;
+    }
+    
+    /* Table mobile */
+    .table {
+        width: 95%;
+        font-size: 12px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 6px 4px;
+    }
+    
+    .table th {
+        font-size: 12px;
+        padding: 8px 4px;
+    }
+    
+    /* Status badges mobile */
+    .status-badge {
+        font-size: 10px;
+        padding: 3px 6px;
+        gap: 3px;
+    }
+    
+    .status-badge i {
+        font-size: 8px;
+    }
+    
+    /* Balance badges mobile */
+    .balance-badge {
+        padding: 2px 6px;
+        font-size: 10px;
+        min-width: 25px;
+    }
+    
+    /* Action buttons mobile */
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    /* Follow-up badge mobile */
+    .follow-up-badge {
+        font-size: 8px;
+        padding: 1px 4px;
+        margin-left: 3px;
+    }
+    
+    /* Real-time info mobile */
+    .real-time-info {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 15px;
+        margin: 15px auto;
+        font-size: 14px;
+    }
+    
+    /* Queue navigation mobile */
+    .queue-navigation {
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .queue-navigation .menu-button {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    
+    /* Empty state mobile */
+    .empty-state {
+        padding: 40px 15px;
+    }
+    
+    .empty-state h3 {
+        font-size: 18px;
+    }
+    
+    .empty-state p {
+        font-size: 14px;
+    }
+    
+    /* Modal mobile */
+    .modal-content {
+        margin: 10% auto;
+        padding: 20px;
+        width: 95%;
+        max-width: 400px;
+    }
+    
+    .modal-content h2 {
+        font-size: 18px;
+    }
+    
+    .driver-info p {
+        font-size: 14px;
+        margin: 12px 0;
+    }
+    
+    .driver-info strong {
+        min-width: 100px;
+    }
+}
+
+/* Extra small devices for manage queue */
+@media (max-width: 480px) {
+    .queue-summary {
+        gap: 8px;
+    }
+    
+    .summary-card {
+        min-width: 70px;
+        padding: 10px 6px;
+    }
+    
+    .summary-content h3 {
+        font-size: 18px;
+    }
+    
+    .summary-content p {
+        font-size: 11px;
+    }
+    
+    .table {
+        width: 98%;
+        font-size: 11px;
+    }
+    
+    .table th,
+    .table td {
+        padding: 4px 2px;
+    }
+    
+    .status-badge {
+        font-size: 9px;
+        padding: 2px 4px;
+    }
+    
+    .balance-badge {
+        font-size: 9px;
+        padding: 1px 4px;
+        min-width: 20px;
+    }
+    
+    .action-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
+    }
+    
+    .queue-navigation .menu-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Language Toggle Button */
+.language-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.lang-btn i {
+    font-size: 16px;
+}
+
+/* Mobile adjustments for language toggle */
+@media (max-width: 768px) {
+    .lang-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        gap: 4px;
+    }
+    
+    .lang-btn i {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lang-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+    }
+    
+    .lang-btn i {
+        font-size: 12px;
+    }
+}
+

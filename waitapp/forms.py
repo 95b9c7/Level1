@@ -14,33 +14,86 @@ class TruckDriverForm(forms.ModelForm):
     class Meta:
         model = TruckDriver
         fields = ['name', 'company', 'phone_number', 'is_follow_up']
+    
     name = forms.CharField(
         label='Driver Name', 
         max_length=200,
-        required=True
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your full name',
+            'autocomplete': 'name',
+            'autofocus': True
+        })
     )
+    
     company = forms.ModelChoiceField(
         label='Company',
         queryset=Company.objects.filter(is_active=True).order_by('name'),
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': 'Select your company'
+        }),
         required=False,
         empty_label='Select a company...'
     )
+    
     phone_number = forms.CharField(
         label='Phone Number',
         max_length=20,
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Enter phone number'
+            'placeholder': '(555) 123-4567',
+            'autocomplete': 'tel',
+            'pattern': '[0-9]{3}-[0-9]{3}-[0-9]{4}'
         })
     )
 
     is_follow_up = forms.BooleanField(
         label='Follow-up?',
         required=False,
-        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+            'id': 'follow-up-checkbox'
+        })
     )
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if name:
+            # Remove extra whitespace
+            name = ' '.join(name.split())
+            # Check if name is too short
+            if len(name) < 2:
+                raise forms.ValidationError("Name must be at least 2 characters long.")
+            # Check if name contains only letters, spaces, and common punctuation
+            if not all(c.isalpha() or c.isspace() or c in ".-'" for c in name):
+                raise forms.ValidationError("Name can only contain letters, spaces, and common punctuation.")
+        return name
+
+    def clean_phone_number(self):
+        phone = self.cleaned_data.get('phone_number')
+        if phone:
+            # Remove all non-digit characters
+            digits = ''.join(filter(str.isdigit, phone))
+            # Check if we have exactly 10 digits
+            if len(digits) != 10:
+                raise forms.ValidationError("Phone number must be exactly 10 digits.")
+            # Format the phone number
+            return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+        return phone
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_follow_up = cleaned_data.get('is_follow_up')
+        company = cleaned_data.get('company')
+        
+        # If it's a follow-up, company is not required
+        if not is_follow_up and not company:
+            raise forms.ValidationError("Please select a company or check the follow-up option.")
+        
+        return cleaned_data
 
 
 class MasterReportForm(forms.Form):

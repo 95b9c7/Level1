@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Check In</title>
     <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,58 +13,199 @@
     <div class="top-bar">
         <div class="logo-container">
             <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="logo">
-        </div> 
+        </div>
+        <div class="language-toggle">
+            <button id="language-btn" class="lang-btn" onclick="toggleLanguage()">
+                <i class="fa fa-globe"></i>
+                <span id="lang-text">Español</span>
+            </button>
+        </div>
     </div>
     <div class="main-content">
         <div class="splash-screen">
             <div class="splash-content">
                 <img src="{% static 'images/Level1DA.PNG' %}" alt="Company Logo" class="splash-logo">
-                <h1>{% trans "Welcome!" %}</h1>
+                <h1 id="welcome-text">Welcome!</h1>
             </div>
         </div>
     <div class="center-text">
-        <h1>{% trans "Driver Check-In" %}</h1>
-        <h3 class="select-option">{% trans "Please fill out the form below to check-in" %}</h3>
+        <h1 id="checkin-title">Driver Check-In</h1>
+        <h3 class="select-option" id="checkin-subtitle">Please fill out the form below to check-in</h3>
+        
+        <!-- Stats Display -->
+        <div class="stats-display">
+            <div class="stat-item">
+                <i class="fa fa-users"></i>
+                <span id="stats-text">{{ total_drivers_today }} drivers checked in today</span>
+            </div>
+            <div class="stat-item">
+                <i class="fa fa-building"></i>
+                <span id="companies-text">{{ active_companies }} active companies</span>
+            </div>
+        </div>
     </div>
     
     <div class="form-container">
-        <form method="post" class="sleek-form">
+        <form method="post" class="sleek-form" id="driver-form">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.name.id_for_label }}" class="form-label">{% trans "Driver Name" %}</label>
-                {{ form.name }}
+            
+            <!-- Error Messages -->
+            {% if form.non_field_errors %}
+            <div class="error-message">
+                {% for error in form.non_field_errors %}
+                    <p><i class="fa fa-exclamation-circle"></i> {{ error }}</p>
+                {% endfor %}
             </div>
+            {% endif %}
+            
             <div class="form-group">
-                <label for="{{ form.name.id_for_label}}" class="form-label">{% trans "Phone Number" %}</label>
-                {{ form.phone_number }}
-            </div>
-           <div class="form-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;">
-                <label for="{{ form.is_follow_up.id_for_label }}" class="form-label" style="margin: 0; white-space: nowrap;">
-                    {% trans "Are you a Follow Up Driver?" %}
+                <label for="{{ form.name.id_for_label }}" class="form-label">
+                    <span id="name-label">Driver Name</span> <span class="required">*</span>
                 </label>
-                {{ form.is_follow_up }}
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <div class="field-error">
+                        {% for error in form.name.errors %}
+                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
+            
+            <div class="form-group">
+                <label for="{{ form.phone_number.id_for_label }}" class="form-label">
+                    <span id="phone-label">Phone Number</span> <span class="required">*</span>
+                </label>
+                {{ form.phone_number }}
+                {% if form.phone_number.errors %}
+                    <div class="field-error">
+                        {% for error in form.phone_number.errors %}
+                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <small class="help-text" id="phone-help">Format: (555) 123-4567</small>
+            </div>
+            
+            <div class="form-group follow-up-group">
+                <label for="{{ form.is_follow_up.id_for_label }}" class="checkbox-label" id="followup-label">
+                    Are you a Follow Up Driver?
+                    <input type="checkbox" name="is_follow_up" id="{{ form.is_follow_up.id_for_label }}" class="form-check-input">
+                </label>
+                {% if form.is_follow_up.errors %}
+                    <div class="field-error">
+                        {% for error in form.is_follow_up.errors %}
+                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
             <div class="form-group" id="company-group">
-                <label for="{{ form.company.id_for_label }}" class="form-label">{% trans "Company" %}</label>
+                <label for="{{ form.company.id_for_label }}" class="form-label">
+                    <span id="company-label">Company</span> <span class="required" id="company-required">*</span>
+                </label>
                 {{ form.company }}
+                {% if form.company.errors %}
+                    <div class="field-error">
+                        {% for error in form.company.errors %}
+                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <small class="help-text" id="company-help">Select your company from the list</small>
             </div>
 
-            {{ form.errors }}
-            <button type="submit" class="menu-button">{% trans "Submit" %}</button>
+            <button type="submit" class="menu-button" id="submit-btn">
+                <i class="fa fa-check"></i> <span id="submit-text">Submit</span>
+            </button>
         </form>
     </div>
 
     <script>
+        // Language translations
+        const translations = {
+            en: {
+                welcome: "Welcome!",
+                checkinTitle: "Driver Check-In",
+                checkinSubtitle: "Please fill out the form below to check-in",
+                statsText: "{{ total_drivers_today }} drivers checked in today",
+                companiesText: "{{ active_companies }} active companies",
+                nameLabel: "Driver Name",
+                phoneLabel: "Phone Number",
+                phoneHelp: "Format: (555) 123-4567",
+                followupLabel: "Are you a Follow Up Driver?",
+                companyLabel: "Company",
+                companyHelp: "Select your company from the list",
+                submitText: "Submit",
+                langText: "Español"
+            },
+            es: {
+                welcome: "¡Bienvenido!",
+                checkinTitle: "Registro de Conductor",
+                checkinSubtitle: "Por favor complete el formulario para registrarse",
+                statsText: "{{ total_drivers_today }} conductores registrados hoy",
+                companiesText: "{{ active_companies }} empresas activas",
+                nameLabel: "Nombre del Conductor",
+                phoneLabel: "Número de Teléfono",
+                phoneHelp: "Formato: (555) 123-4567",
+                followupLabel: "¿Eres un conductor de seguimiento?",
+                companyLabel: "Empresa",
+                companyHelp: "Seleccione su empresa de la lista",
+                submitText: "Enviar",
+                langText: "English"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const lang = translations[currentLang];
+            
+            // Update all text elements
+            document.getElementById('welcome-text').textContent = lang.welcome;
+            document.getElementById('checkin-title').textContent = lang.checkinTitle;
+            document.getElementById('checkin-subtitle').textContent = lang.checkinSubtitle;
+            document.getElementById('stats-text').textContent = lang.statsText;
+            document.getElementById('companies-text').textContent = lang.companiesText;
+            document.getElementById('name-label').textContent = lang.nameLabel;
+            document.getElementById('phone-label').textContent = lang.phoneLabel;
+            document.getElementById('phone-help').textContent = lang.phoneHelp;
+            
+            // Update followup label - preserve the checkbox
+            const followupLabel = document.getElementById('followup-label');
+            const checkbox = followupLabel.querySelector('.form-check-input');
+            followupLabel.innerHTML = lang.followupLabel;
+            if (checkbox) {
+                followupLabel.appendChild(checkbox);
+            }
+            
+            document.getElementById('company-label').textContent = lang.companyLabel;
+            document.getElementById('company-help').textContent = lang.companyHelp;
+            document.getElementById('submit-text').textContent = lang.submitText;
+            document.getElementById('lang-text').textContent = lang.langText;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const followUpCheckbox = document.getElementById('{{ form.is_follow_up.id_for_label }}');
             const companyGroup = document.getElementById('company-group');
             const phoneInput = document.getElementById('{{ form.phone_number.id_for_label }}');
+            const nameInput = document.getElementById('{{ form.name.id_for_label }}');
+            const submitBtn = document.getElementById('submit-btn');
+            const form = document.getElementById('driver-form');
             
             function toggleCompanyField() {
                 if (followUpCheckbox.checked) {
                     companyGroup.style.display = 'none';
+                    document.getElementById('company-required').style.display = 'none';
                 } else {
                     companyGroup.style.display = 'block';
+                    document.getElementById('company-required').style.display = 'inline';
                 }
             }
             
@@ -110,6 +251,74 @@
                 });
             }
             
+            // Form validation
+            function validateForm() {
+                let isValid = true;
+                
+                // Validate name
+                if (!nameInput.value.trim()) {
+                    showFieldError(nameInput, currentLang === 'en' ? 'Name is required' : 'El nombre es requerido');
+                    isValid = false;
+                } else if (nameInput.value.trim().length < 2) {
+                    showFieldError(nameInput, currentLang === 'en' ? 'Name must be at least 2 characters' : 'El nombre debe tener al menos 2 caracteres');
+                    isValid = false;
+                } else {
+                    clearFieldError(nameInput);
+                }
+                
+                // Validate phone
+                const phoneDigits = phoneInput.value.replace(/\D/g, '');
+                if (phoneDigits.length !== 10) {
+                    showFieldError(phoneInput, currentLang === 'en' ? 'Phone number must be 10 digits' : 'El número de teléfono debe tener 10 dígitos');
+                    isValid = false;
+                } else {
+                    clearFieldError(phoneInput);
+                }
+                
+                // Validate company (if not follow-up)
+                if (!followUpCheckbox.checked) {
+                    const companySelect = document.getElementById('{{ form.company.id_for_label }}');
+                    if (!companySelect.value) {
+                        showFieldError(companySelect, currentLang === 'en' ? 'Please select a company' : 'Por favor seleccione una empresa');
+                        isValid = false;
+                    } else {
+                        clearFieldError(companySelect);
+                    }
+                }
+                
+                return isValid;
+            }
+            
+            function showFieldError(field, message) {
+                clearFieldError(field);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'field-error';
+                errorDiv.innerHTML = `<p><i class="fa fa-exclamation-triangle"></i> ${message}</p>`;
+                field.parentNode.appendChild(errorDiv);
+                field.classList.add('error');
+            }
+            
+            function clearFieldError(field) {
+                const existingError = field.parentNode.querySelector('.field-error');
+                if (existingError) {
+                    existingError.remove();
+                }
+                field.classList.remove('error');
+            }
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                const loadingText = currentLang === 'en' ? 'Submitting...' : 'Enviando...';
+                submitBtn.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${loadingText}`;
+            });
+            
             // Initial state
             toggleCompanyField();
             
@@ -122,7 +331,7 @@
     <!-- Footer with Watermark -->
     <div class="footer-watermark">
         <div class="powered-by">
-            <p>{% trans "Powered by" %} <strong>Innovate Tech Solutions</strong></p>
+            <p>Powered by <strong>Innovate Tech Solutions</strong></p>
         </div>
     </div>
     {% block extra_js %}{% endblock %}

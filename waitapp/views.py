@@ -21,6 +21,7 @@ from .email_utils import (
 )
 from datetime import date, timedelta
 from django.db.models import Count
+from django.db.models import Q
 
 # Create your views here.
 
@@ -108,20 +109,21 @@ def menu(request):
 
 @login_required
 def manage_queue(request):
+    today = timezone.localdate()
     submissions = TruckDriver.objects.exclude(status='Finished').order_by('check_in_date', 'check_in_time')
     
     # Calculate counts for summary cards
-    total_count = TruckDriver.objects.count()
+    total_in_queue = TruckDriver.objects.exclude(status='Finished').count()
     waiting_count = TruckDriver.objects.filter(status='Waiting').count()
     in_progress_count = TruckDriver.objects.filter(status='In Progress').count()
-    finished_count = TruckDriver.objects.filter(status='Finished').count()
+    finished_today_count = TruckDriver.objects.filter(status='Finished', finished_date=today).count()
 
     context = {
         'submissions': submissions,
-        'total_count': total_count,
+        'total_in_queue': total_in_queue,
         'waiting_count': waiting_count,
         'in_progress_count': in_progress_count,
-        'finished_count': finished_count,
+        'finished_today_count': finished_today_count,
     }
 
     return render(request, 'manage_queue.html', context)
@@ -270,7 +272,13 @@ from django.core.paginator import Paginator
 
 @login_required
 def modify_companies(request):
+    search_query = request.GET.get('q', '')
     companies_list = Company.objects.all().order_by('name')
+    if search_query:
+        companies_list = companies_list.filter(
+            Q(name__icontains=search_query) |
+            Q(contact_email__icontains=search_query)
+        )
     paginator = Paginator(companies_list, 10)  # Show 10 companies per page
     
     page_number = request.GET.get('page')
@@ -289,6 +297,7 @@ def modify_companies(request):
         'active_companies': active_companies,
         'inactive_companies': inactive_companies,
         'low_balance_companies': low_balance_companies,
+        'search_query': search_query,
     }
     
     return render(request, 'modify_companies.html', context)

@@ -60,7 +60,7 @@ MIDDLEWARE = [
     
 ]
 
-LANGUGAE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = [
     ('en-us', 'English'),

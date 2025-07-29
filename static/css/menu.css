@@ -1171,11 +1171,23 @@ input[type="checkbox"].form-check-input {
     
     .checkbox-label {
         font-size: 14px;
+        gap: 12px;
     }
     
     .form-check-input {
         width: 16px;
         height: 16px;
+    }
+    
+    .follow-up-group,
+    .walk-in-group {
+        margin-bottom: 20px;
+    }
+    
+    .follow-up-group .checkbox-label,
+    .walk-in-group .checkbox-label {
+        gap: 15px;
+        padding: 8px 0;
     }
     
     /* Error messages mobile */

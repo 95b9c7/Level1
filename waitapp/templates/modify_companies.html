@@ -8,6 +8,17 @@
         <h1>Modify Companies</h1>
         <h3 class="select-option">View and edit company information</h3>
         
+        <!-- Search Bar -->
+        <div class="search-bar" style="text-align:center; margin-bottom: 20px;">
+            <form method="get" action="">
+                <input type="text" name="q" placeholder="Search companies..." value="{{ search_query }}" class="menu-input" style="padding: 8px; width: 250px; border-radius: 4px; border: 1px solid #ccc;">
+                <button type="submit" class="menu-button"><i class="fa fa-search"></i> Search</button>
+                {% if search_query %}
+                    <a href="{% url 'modify_companies' %}" class="menu-button" style="background:#eee;color:#333;">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+        
         <!-- Company Summary -->
         <div class="queue-summary">
             <div class="summary-card">

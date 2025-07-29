@@ -21,6 +21,7 @@ from .email_utils import (
 )
 from datetime import date, timedelta
 from django.db.models import Count
+from django.db.models import Q
 
 # Create your views here.
 
@@ -237,7 +238,13 @@ from django.core.paginator import Paginator
 
 @login_required
 def modify_companies(request):
+    search_query = request.GET.get('q', '')
     companies_list = Company.objects.all().order_by('name')
+    if search_query:
+        companies_list = companies_list.filter(
+            Q(name__icontains=search_query) |
+            Q(contact_email__icontains=search_query)
+        )
     paginator = Paginator(companies_list, 10)  # Show 10 companies per page
     
     page_number = request.GET.get('page')
@@ -256,6 +263,7 @@ def modify_companies(request):
         'active_companies': active_companies,
         'inactive_companies': inactive_companies,
         'low_balance_companies': low_balance_companies,
+        'search_query': search_query,
     }
     
     return render(request, 'modify_companies.html', context)

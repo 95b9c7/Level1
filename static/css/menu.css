@@ -1186,7 +1186,7 @@ input[type="checkbox"].form-check-input {
     
     .follow-up-group .checkbox-label,
     .walk-in-group .checkbox-label {
-        gap: 50px;
+        gap: 150px;
         padding: 8px 0;
     }
     

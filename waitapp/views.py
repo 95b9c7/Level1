@@ -74,20 +74,21 @@ def menu(request):
 
 @login_required
 def manage_queue(request):
+    today = timezone.localdate()
     submissions = TruckDriver.objects.exclude(status='Finished').order_by('check_in_date', 'check_in_time')
     
     # Calculate counts for summary cards
-    total_count = TruckDriver.objects.count()
+    total_in_queue = TruckDriver.objects.exclude(status='Finished').count()
     waiting_count = TruckDriver.objects.filter(status='Waiting').count()
     in_progress_count = TruckDriver.objects.filter(status='In Progress').count()
-    finished_count = TruckDriver.objects.filter(status='Finished').count()
+    finished_today_count = TruckDriver.objects.filter(status='Finished', finished_date=today).count()
 
     context = {
         'submissions': submissions,
-        'total_count': total_count,
+        'total_in_queue': total_in_queue,
         'waiting_count': waiting_count,
         'in_progress_count': in_progress_count,
-        'finished_count': finished_count,
+        'finished_today_count': finished_today_count,
     }
 
     return render(request, 'manage_queue.html', context)

@@ -145,9 +145,6 @@ def update_status(request):
             submission.finished_employee = request.user.username
             submission.save()
 
-            # Send completion notification
-            send_test_completed_email(submission)
-
             # Update test balance and send alerts (skip for WALK-IN and FOLLOW-UP)
             if (submission.company and 
                 submission.company.tests_remaining > 0 and 
@@ -157,11 +154,17 @@ def update_status(request):
                 submission.company.tests_remaining -= 1
                 submission.company.save()
 
+                # Send completion notification with updated balance
+                send_test_completed_email(submission)
+
                 # Send appropriate balance alerts
                 if submission.company.tests_remaining == 0:
                     send_zero_balance_email(submission.company)
                 elif submission.company.tests_remaining <= 5:
                     send_low_balance_email(submission.company)
+            else:
+                # Send completion notification for WALK-IN and FOLLOW-UP (no balance update)
+                send_test_completed_email(submission)
 
         return JsonResponse({'success': True})
 

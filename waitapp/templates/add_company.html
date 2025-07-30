@@ -7,11 +7,25 @@
 <div class="center-text">
     <h1>Add New Company</h1>
     <div class="form-container">
-    <form method="post" class="sleek-form">
+    <form method="post" class="sleek-form" id="add-company-form">
         {% csrf_token %}
+        {% if form.name.errors %}
+            {% for error in form.name.errors %}
+                {% if 'already exists' in error %}
+                    <div class="notification notification-error show" style="margin-bottom: 20px;">
+                        <i class="fa fa-exclamation-triangle"></i> {{ error }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <div class="form-group">
             <label for="id_name">Company name:</label>
             {{ form.name }}
+            {% if form.name.errors %}
+                <div class="error-message" style="color: #dc3545; font-size: 14px; margin-top: 5px;">
+                    {{ form.name.errors.0 }}
+                </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="id_contact_email">Contact email:</label>
@@ -34,4 +48,10 @@
 </div>
                 </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // The duplicate company error alert is now handled by the form-group .error-message
+        // and the notification banner.
+    });
+</script>
 {% endblock %}

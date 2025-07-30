@@ -88,34 +88,15 @@
             </div>
             
             <div class="form-group follow-up-group">
-                <label for="{{ form.is_follow_up.id_for_label }}" class="checkbox-label" id="followup-label">
-                    Are you a Follow Up Driver?
-                    <input type="checkbox" name="is_follow_up" id="{{ form.is_follow_up.id_for_label }}" class="form-check-input">
-                </label>
-                {% if form.is_follow_up.errors %}
-                    <div class="field-error">
-                        {% for error in form.is_follow_up.errors %}
-                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <!-- Removed Follow Up checkbox as per client request -->
             </div>
             
             <div class="form-group walk-in-group">
-                <label for="{{ form.is_walk_in.id_for_label }}" class="checkbox-label" id="walkin-label">
-                    Are you a Walk-in Driver?
-                    <input type="checkbox" name="is_walk_in" id="{{ form.is_walk_in.id_for_label }}" class="form-check-input">
-                </label>
-                {% if form.is_walk_in.errors %}
-                    <div class="field-error">
-                        {% for error in form.is_walk_in.errors %}
-                            <p><i class="fa fa-exclamation-triangle"></i> {{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <!-- Removed Walk In checkbox as per client request -->
             </div>
 
             <div class="form-group" id="company-group">
+                <!-- Company dropdown will now include 'Follow Up' and 'Walk In' as company options -->
                 <label for="{{ form.company.id_for_label }}" class="form-label">
                     <span id="company-label">Company</span> <span class="required" id="company-required">*</span>
                 </label>
@@ -216,74 +197,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const followUpCheckbox = document.getElementById('{{ form.is_follow_up.id_for_label }}');
-            const walkInCheckbox = document.getElementById('{{ form.is_walk_in.id_for_label }}');
-            const followUpGroup = document.querySelector('.follow-up-group');
-            const walkInGroup = document.querySelector('.walk-in-group');
+            // Removed checkbox logic for follow up and walk in
             const companyGroup = document.getElementById('company-group');
             const phoneInput = document.getElementById('{{ form.phone_number.id_for_label }}');
             const nameInput = document.getElementById('{{ form.name.id_for_label }}');
             const submitBtn = document.getElementById('submit-btn');
             const form = document.getElementById('driver-form');
-            
-            function toggleCompanyField() {
-                if (followUpCheckbox.checked || walkInCheckbox.checked) {
-                    companyGroup.style.display = 'none';
-                    document.getElementById('company-required').style.display = 'none';
-                } else {
-                    companyGroup.style.display = 'block';
-                    document.getElementById('company-required').style.display = 'inline';
-                }
-            }
-            
-            function handleCheckboxChange(changedCheckbox) {
-                const companySelect = document.getElementById('{{ form.company.id_for_label }}');
-                
-                console.log('Checkbox changed:', changedCheckbox.id);
-                console.log('Follow-up checked:', followUpCheckbox.checked);
-                console.log('Walk-in checked:', walkInCheckbox.checked);
-                console.log('Follow-up group found:', followUpGroup);
-                console.log('Walk-in group found:', walkInGroup);
-                
-                if (changedCheckbox === followUpCheckbox && followUpCheckbox.checked) {
-                    // Follow-up checked: hide walk-in and company
-                    if (walkInGroup) walkInGroup.style.display = 'none';
-                    if (companyGroup) companyGroup.style.display = 'none';
-                    const companyRequired = document.getElementById('company-required');
-                    if (companyRequired) companyRequired.style.display = 'none';
-                    // Clear company selection for follow-up
-                    if (companySelect) companySelect.value = '';
-                } else if (changedCheckbox === walkInCheckbox && walkInCheckbox.checked) {
-                    // Walk-in checked: hide follow-up and company, set WALK-IN as company
-                    if (followUpGroup) followUpGroup.style.display = 'none';
-                    if (companyGroup) companyGroup.style.display = 'none';
-                    const companyRequired = document.getElementById('company-required');
-                    if (companyRequired) companyRequired.style.display = 'none';
-                    // Set WALK-IN as the company
-                    setWalkInCompany();
-                } else {
-                    // Nothing checked: show all options
-                    if (followUpGroup) followUpGroup.style.display = 'block';
-                    if (walkInGroup) walkInGroup.style.display = 'block';
-                    if (companyGroup) companyGroup.style.display = 'block';
-                    const companyRequired = document.getElementById('company-required');
-                    if (companyRequired) companyRequired.style.display = 'inline';
-                    // Clear company selection
-                    if (companySelect) companySelect.value = '';
-                }
-            }
-            
-            function setWalkInCompany() {
-                const companySelect = document.getElementById('{{ form.company.id_for_label }}');
-                
-                // Find the WALK-IN option in the dropdown
-                for (let i = 0; i < companySelect.options.length; i++) {
-                    if (companySelect.options[i].text === 'WALK-IN') {
-                        companySelect.value = companySelect.options[i].value;
-                        break;
-                    }
-                }
-            }
+            // No more checkbox toggling logic
             
             // Phone number formatting
             function formatPhoneNumber(value) {
@@ -352,14 +272,15 @@
                 }
                 
                 // Validate company (if not follow-up or walk-in)
-                if (!followUpCheckbox.checked && !walkInCheckbox.checked) {
-                    const companySelect = document.getElementById('{{ form.company.id_for_label }}');
-                    if (!companySelect.value) {
-                        showFieldError(companySelect, currentLang === 'en' ? 'Please select a company' : 'Por favor seleccione una empresa');
-                        isValid = false;
-                    } else {
-                        clearFieldError(companySelect);
-                    }
+                // The company field is now required, so this validation might need adjustment
+                // if the intent was to allow 'Follow Up' or 'Walk In' as company names.
+                // For now, assuming 'Follow Up' and 'Walk In' are not directly selected as companies.
+                const companySelect = document.getElementById('{{ form.company.id_for_label }}');
+                if (!companySelect.value) {
+                    showFieldError(companySelect, currentLang === 'en' ? 'Please select a company' : 'Por favor seleccione una empresa');
+                    isValid = false;
+                } else {
+                    clearFieldError(companySelect);
                 }
                 
                 return isValid;
@@ -396,18 +317,12 @@
             });
             
             // Initial state - show all options
-            followUpGroup.style.display = 'block';
-            walkInGroup.style.display = 'block';
+            // Removed checkbox toggling logic
             companyGroup.style.display = 'block';
             document.getElementById('company-required').style.display = 'inline';
             
             // Listen for changes
-            followUpCheckbox.addEventListener('change', function() {
-                handleCheckboxChange(followUpCheckbox);
-            });
-            walkInCheckbox.addEventListener('change', function() {
-                handleCheckboxChange(walkInCheckbox);
-            });
+            // Removed checkbox listeners
         });
     </script>
     </div>
